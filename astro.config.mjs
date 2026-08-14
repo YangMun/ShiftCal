@@ -6,5 +6,7 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://ondutycal.com',
   trailingSlash: 'never',
+  // 'file' 출력이라야 /slug 요청이 리다이렉트 없이 200으로 서빙됨 (canonical과 일치)
+  build: { format: 'file' },
   integrations: [sitemap()],
 });
