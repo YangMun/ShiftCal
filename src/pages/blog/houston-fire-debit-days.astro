@@ -1,0 +1,67 @@
+---
+import ToolPage from '../../layouts/ToolPage.astro';
+---
+
+<ToolPage
+  kind="guide"
+  title="How Houston Fire's Debit Day System Actually Works"
+  description="HFD's A/B/C/D shifts, the 8-day cycle, and the A/C3-style debit notation decoded — how partner shifts, 9 debit groups, and the 72-day duty cycle turn a light calendar into contract hours."
+  h1="Houston Fire's Debit Days, Decoded"
+>
+  <p>
+    Look at the official Houston Fire Department calendar and the first thing you notice is the
+    strange notation: <strong>A/C3</strong>, <strong>B/D5</strong>, <strong>C/A7</strong>. The
+    letter before the slash is easy — that shift is on duty. The rest is the
+    <em>debit day system</em>, and it is the part of HFD's schedule that confuses every rookie and
+    most of their families.
+  </p>
+
+  <h2>Start with the base cycle</h2>
+  <p>
+    HFD runs four shifts — A, B, C, D — on 24-hour tours starting at 6:30 am, repeating an 8-day
+    sequence: A, B, A, B, C, D, C, D. Each shift works two tours in eight days (tour, day off,
+    tour, five days off). Two tours per eight days is only about 42 hours a week — noticeably
+    lighter than the ~46.7 hours HFD firefighters are actually scheduled to work under contract.
+    The gap has to come from somewhere. It comes from debit days.
+  </p>
+
+  <h2>The partner-shift mechanism</h2>
+  <p>
+    Shifts are paired: <strong>A with C, B with D</strong>. On any duty day, the on-duty shift is
+    joined by one <em>debit group</em> from its partner shift — a subset of the partner's members
+    working an extra 24-hour tour on what would otherwise be a day off. Each shift's members are
+    divided into nine debit groups, numbered 1 through 9, and the calendar notation names which
+    group owes the extra tour: "A/C3" means A shift is on duty and C shift's group 3 works with
+    them.
+  </p>
+
+  <h2>The 72-day duty cycle</h2>
+  <p>
+    Nine debit groups rotating across a shift-pair's duty days produce a 72-day super-cycle (9
+    groups × the 8-day base cycle), which the official calendar marks with "End/Begin 72 Day Duty
+    Cycle" notes. Practically: your debit day comes around roughly every nine of your shift's duty
+    days — about once every five to six weeks — and it is fully predictable years ahead, because
+    the whole machine is deterministic. One extra 24-hour tour per cycle is what lifts the average
+    from 42 toward contract hours.
+  </p>
+
+  <h2>What this means for planning</h2>
+  <p>
+    Two practical consequences. First, your five-day breaks are not all equal — one break per
+    debit rotation loses a day to the extra tour, so trips booked months out should check the debit
+    calendar, not just the base cycle. Second, trades involve two currencies: regular tours trade
+    within your shift, debit obligations trade within your debit group, and mixing them up is the
+    classic scheduling argument at the kitchen table. Know which kind of day you are giving away.
+  </p>
+
+  <h2>Your personal HFD calendar</h2>
+  <p>
+    The <a href="/houston-fire-department-shift-calendar">HFD shift calendar</a> on this site is
+    aligned to the city's official rotation (which has run unbroken since at least 2022) — pick
+    your shift letter and get every base tour for 12 months, holidays answered, exportable to your
+    phone. Debit groups are member-specific, so confirm your group number at the station and pencil
+    those days on top. For the wider context of how Houston's system compares with other
+    departments' rotations, see the <a href="/firefighter-shift-calendar">firefighter calendar
+    hub</a> and the <a href="/blog/48-96-vs-kelly">48/96 vs Kelly comparison</a>.
+  </p>
+</ToolPage>
