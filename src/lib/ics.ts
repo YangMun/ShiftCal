@@ -10,11 +10,11 @@ function fmt(d: Date): string {
   return `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}`;
 }
 
-export function buildIcs(events: CalendarEvent[], calendarName = 'ShiftCal'): string {
+export function buildIcs(events: CalendarEvent[], calendarName = 'OnDutyCal'): string {
   const lines = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//ShiftCal//EN',
+    'PRODID:-//OnDutyCal//EN',
     `X-WR-CALNAME:${calendarName}`,
   ];
   for (const ev of events) {

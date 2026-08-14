@@ -246,7 +246,7 @@ const { cycle, anchor, platoons, shiftLabel, icsName } = Astro.props;
       wrap.hidden = false;
 
       root.querySelector<HTMLElement>('.dc-print-title')!.textContent =
-        `${platoon} Platoon — 12-month duty calendar (made with ShiftCal)`;
+        `${platoon} Platoon — 12-month duty calendar (made with OnDutyCal)`;
       wrap.querySelector<HTMLButtonElement>('.dc-ics')!.onclick = () =>
         downloadIcs(events, `${root.dataset.icsName}-${platoon}.ics`);
       wrap.querySelector<HTMLButtonElement>('.dc-csv')!.onclick = () =>

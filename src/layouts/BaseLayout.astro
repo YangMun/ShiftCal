@@ -30,7 +30,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
-    <meta property="og:site_name" content="ShiftCal" />
+    <meta property="og:site_name" content="OnDutyCal" />
     <meta name="twitter:card" content="summary" />
     {/* FOUC 방지: 저장된 테마를 파싱 시점에 적용 */}
     <script is:inline>
@@ -41,18 +41,29 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         } catch (e) {}
       })();
     </script>
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'OnDutyCal',
+        url: Astro.site?.href,
+        description:
+          'Free shift schedule calculators for US shift workers — personalized 12-month calendars with holidays, paydays, and calendar export.',
+      })}
+    />
     {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
   </head>
   <body>
     <header class="site-header">
       <div class="shell header-row">
-        <a class="wordmark" href="/" aria-label="ShiftCal home">
+        <a class="wordmark" href="/" aria-label="OnDutyCal home">
           <svg class="mark" viewBox="0 0 20 20" aria-hidden="true">
             <rect x="1" y="1" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2" />
             <line x1="1" y1="7" x2="19" y2="7" stroke="currentColor" stroke-width="2" />
             <rect class="mark-dot" x="11" y="10" width="5" height="5" />
           </svg>
-          Shift<span>Cal</span>
+          OnDuty<span>Cal</span>
         </a>
         <nav class="site-nav" aria-label="Main">
           <a href="/">Patterns</a>

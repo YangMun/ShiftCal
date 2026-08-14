@@ -1,6 +1,6 @@
 ---
 import ToolPage from '../layouts/ToolPage.astro';
-import ShiftCalculator from '../components/ShiftCalculator.astro';
+import OnDutyCalculator from '../components/OnDutyCalculator.astro';
 import { federalHolidays } from '../lib/holidays';
 
 const holidays2027 = federalHolidays(2027).map((h) => ({
@@ -37,7 +37,7 @@ const faqs = [
     crew, months before the roster is posted on the wall.
   </p>
 
-  <ShiftCalculator defaultPattern="2-2-3-panama" />
+  <OnDutyCalculator defaultPattern="2-2-3-panama" />
 
   <h2>US federal holidays in 2027</h2>
   <table>

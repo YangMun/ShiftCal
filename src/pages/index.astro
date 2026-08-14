@@ -1,20 +1,20 @@
 ---
 import ToolPage from '../layouts/ToolPage.astro';
-import ShiftCalculator from '../components/ShiftCalculator.astro';
+import OnDutyCalculator from '../components/OnDutyCalculator.astro';
 import { PATTERNS } from '../lib/shiftPatterns';
 
 const faqs = [
   {
     q: 'What is an "anchor date" and where do I find mine?',
-    a: 'Your anchor date is simply the first day of any block of shifts you know you worked (or will work). Check last week in your work app, a posted roster, or a pay stub, and pick the first day of that run. ShiftCal repeats your rotation forward and backward from that single date.',
+    a: 'Your anchor date is simply the first day of any block of shifts you know you worked (or will work). Check last week in your work app, a posted roster, or a pay stub, and pick the first day of that run. OnDutyCal repeats your rotation forward and backward from that single date.',
   },
   {
-    q: 'Does ShiftCal work for rotations that are not listed?',
+    q: 'Does OnDutyCal work for rotations that are not listed?',
     a: 'The six patterns here cover the most common US rotations (2-2-3 Panama, Pitman, DuPont, 4-on-4-off, 48/96, Kelly). If your department runs a local variant, pick the closest pattern and check the first two weeks against your posted roster before trusting the rest of the year.',
   },
   {
     q: 'Is my schedule data uploaded anywhere?',
-    a: 'No. Everything is calculated in your browser. ShiftCal has no accounts and no server-side storage; your dates never leave your device.',
+    a: 'No. Everything is calculated in your browser. OnDutyCal has no accounts and no server-side storage; your dates never leave your device.',
   },
   {
     q: 'How do I get the calendar onto my phone?',
@@ -24,7 +24,7 @@ const faqs = [
 ---
 
 <ToolPage
-  title="ShiftCal — Shift Schedule Calculator for US Shift Workers"
+  title="OnDutyCal — Shift Schedule Calculator for US Shift Workers"
   description="Free shift schedule calculator. Enter your rotation (2-2-3 Panama, Pitman, DuPont, 4-on-4-off, 48/96, Kelly) and one known workday to get your personal 12-month calendar with US holidays and paydays — exportable to your phone."
   h1="Am I working that day?"
   faqs={faqs}
@@ -32,12 +32,12 @@ const faqs = [
   <p>
     If you work a rotating schedule, "what days am I working next month?" should not require counting
     squares on a paper calendar. Pick your rotation below, enter <strong>one day you know you start a
-    run of shifts</strong>, and ShiftCal builds your personal 12-month work calendar — with every US
+    run of shifts</strong>, and OnDutyCal builds your personal 12-month work calendar — with every US
     federal holiday answered (working or off), your biweekly paydays marked, and a one-tap export to
     your phone's calendar app.
   </p>
 
-  <ShiftCalculator defaultPattern="all" />
+  <OnDutyCalculator defaultPattern="all" />
 
   <h2>Which rotation do you work?</h2>
   <p>
@@ -71,7 +71,7 @@ const faqs = [
     side of it.
   </p>
   <p>
-    ShiftCal is deliberately simple: no login, no app install, nothing stored anywhere but your own
+    OnDutyCal is deliberately simple: no login, no app install, nothing stored anywhere but your own
     browser. Set it up once, bookmark it, and the calculator remembers your rotation the next time
     you open the page. Firefighters can also jump straight to pre-configured calendars for
     <a href="/houston-fire-department-shift-calendar">Houston Fire</a>,

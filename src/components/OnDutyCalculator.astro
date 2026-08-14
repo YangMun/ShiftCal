@@ -337,11 +337,11 @@ const showSelect = defaultPattern === 'all';
     wrap.hidden = false;
 
     root.querySelector<HTMLElement>('.sc-print-title')!.textContent =
-      `${pattern.name} — 12-month shift calendar (made with ShiftCal)`;
+      `${pattern.name} — 12-month shift calendar (made with OnDutyCal)`;
     wrap.querySelector<HTMLButtonElement>('.sc-ics')!.onclick = () =>
-      downloadIcs(events, `shiftcal-${pattern.slug}.ics`);
+      downloadIcs(events, `ondutycal-${pattern.slug}.ics`);
     wrap.querySelector<HTMLButtonElement>('.sc-csv')!.onclick = () =>
-      downloadCsv(events, `shiftcal-${pattern.slug}.csv`);
+      downloadCsv(events, `ondutycal-${pattern.slug}.csv`);
     wrap.querySelector<HTMLButtonElement>('.sc-print')!.onclick = () => {
       document.body.classList.add('print-cal');
       window.addEventListener('afterprint', () => document.body.classList.remove('print-cal'), {
