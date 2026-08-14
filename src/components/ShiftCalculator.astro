@@ -113,20 +113,22 @@ const showSelect = defaultPattern === 'all';
     display: grid;
     gap: 0.35rem;
   }
-  .sc-answers li {
+  /* JS로 생성되는 li에는 Astro 스코프 속성이 없으므로 :global 필수 */
+  .sc-answers :global(li) {
     display: flex;
     justify-content: space-between;
+    gap: 0.75rem;
     padding: 0.45rem 0.6rem;
     border-radius: 6px;
     background: #f4f4f5;
   }
-  .sc-answers li.working {
+  .sc-answers :global(li.working) {
     background: #fee2e2;
   }
-  .sc-answers li.off {
+  .sc-answers :global(li.off) {
     background: #dcfce7;
   }
-  .sc-answers li.hl {
+  .sc-answers :global(li.hl) {
     outline: 2px solid var(--accent, #1d4ed8);
   }
   .sc-legend {
