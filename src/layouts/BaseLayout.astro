@@ -91,6 +91,9 @@ const adsensePub = import.meta.env.ADSENSE_PUB ?? process.env.ADSENSE_PUB;
       <slot />
     </main>
 
+    {/* 데스크톱 우측 광고 레일 — 승인 후 유닛 삽입 전까지는 빈 요소(비표시) */}
+    <aside class="ad-rail" aria-hidden="true"></aside>
+
     <footer class="site-footer">
       <div class="shell footer-grid">
         <div>
@@ -522,6 +525,25 @@ const adsensePub = import.meta.env.ADSENSE_PUB ?? process.env.ADSENSE_PUB;
     padding-top: 1.2rem;
     border-top: 1px solid var(--rule);
     color: var(--muted);
+  }
+
+  /* ── 데스크톱 광고 레일: 본문(56rem)과 겹치지 않는 와이드 화면에서만 ── */
+  .ad-rail {
+    display: none;
+  }
+  @media (min-width: 1560px) {
+    .ad-rail {
+      display: block;
+      position: fixed;
+      top: 6rem;
+      right: 1.5rem;
+      width: 300px;
+    }
+  }
+  @media print {
+    .ad-rail {
+      display: none !important;
+    }
   }
 
   /* ── 인쇄용 벽 달력: "Print wall calendar" 버튼이 body.print-cal을 켠다 ── */
