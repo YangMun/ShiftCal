@@ -1,0 +1,99 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const guides = [
+  {
+    href: '/blog/2-2-3-vs-4-on-4-off',
+    title: '2-2-3 vs 4-On-4-Off',
+    blurb: 'Which 12-hour rotation fits your life — weekends, fatigue, childcare, and pay compared honestly.',
+  },
+  {
+    href: '/blog/pitman-vs-dupont',
+    title: 'Pitman vs DuPont',
+    blurb: 'Fixed shifts or the monthly seven-day break? Circadian stability against the 72-hour week.',
+  },
+  {
+    href: '/blog/48-96-vs-kelly',
+    title: '48/96 vs Kelly',
+    blurb: 'The firefighter schedule debate: commutes, hour-40 fatigue, trades, and second jobs.',
+  },
+  {
+    href: '/blog/houston-fire-debit-days',
+    title: "Houston Fire's Debit Days, Decoded",
+    blurb: 'The A/C3 notation, nine debit groups, and the 72-day duty cycle behind the HFD calendar.',
+  },
+  {
+    href: '/blog/shift-differential-overtime-mistake',
+    title: 'The 1.5× Base Overtime Mistake',
+    blurb: 'Differentials legally raise your overtime rate. Audit your own pay stub in five minutes.',
+  },
+  {
+    href: '/blog/nurse-fourth-shift-math',
+    title: 'The Real Math of the Fourth 12',
+    blurb: 'Why pickup shifts pay disproportionately — and what they actually cost in recovery.',
+  },
+  {
+    href: '/blog/rotating-night-shift-sleep-playbook',
+    title: 'The Anchor-Sleep Playbook',
+    blurb: 'A practical sleep system for rotating nights: anchors, the landing-nap flip, and light control.',
+  },
+  {
+    href: '/blog/family-planning-rotating-schedule',
+    title: 'Family Planning on a Rotating Schedule',
+    blurb: 'The systems shift-work families actually use: shared calendars, trade season, and aimed leave.',
+  },
+];
+---
+
+<BaseLayout
+  title="Shift Work Guides — OnDutyCal"
+  description="Practical guides for US shift workers: rotation comparisons, department schedule systems, FLSA pay math, night-shift sleep, and family planning around a rotating calendar."
+>
+  <h1>Shift Work Guides</h1>
+  <p>
+    Written to answer the questions the <a href="/">calculators</a> can't: which rotation to
+    choose, how department systems really work, what your pay stub should say, and how to build a
+    life around a schedule that ignores weekends.
+  </p>
+  <div class="guide-list">
+    {guides.map((g) => (
+      <a class="guide-card" href={g.href}>
+        <span class="guide-title">{g.title}</span>
+        <span class="guide-blurb">{g.blurb}</span>
+      </a>
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .guide-list {
+    display: grid;
+    gap: 0.9rem;
+    margin: 1.5rem 0;
+  }
+  .guide-card {
+    display: grid;
+    gap: 0.25rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    background: var(--surface);
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .guide-card:hover {
+    border-color: var(--accent);
+  }
+  .guide-title {
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--accent-ink);
+  }
+  .guide-blurb {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+</style>
