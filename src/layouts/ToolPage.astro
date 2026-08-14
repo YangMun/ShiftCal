@@ -14,20 +14,38 @@ interface Props {
   faqs?: Faq[];
   /** 관련 도구 링크에서 제외할 현재 경로 */
   currentPath?: string;
+  /** 'tool'(기본) = WebApplication 스키마, 'guide' = Article 스키마 */
+  kind?: 'tool' | 'guide';
 }
-const { title, description, h1, faqs = [], currentPath = Astro.url.pathname } = Astro.props;
+const {
+  title,
+  description,
+  h1,
+  faqs = [],
+  currentPath = Astro.url.pathname,
+  kind = 'tool',
+} = Astro.props;
 
 const schema: object[] = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    name: h1,
-    url: new URL(currentPath, Astro.site).href,
-    applicationCategory: 'UtilityApplication',
-    operatingSystem: 'Any',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-    description,
-  },
+  kind === 'guide'
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: h1,
+        url: new URL(currentPath, Astro.site).href,
+        description,
+        publisher: { '@type': 'Organization', name: 'OnDutyCal' },
+      }
+    : {
+        '@context': 'https://schema.org',
+        '@type': 'WebApplication',
+        name: h1,
+        url: new URL(currentPath, Astro.site).href,
+        applicationCategory: 'UtilityApplication',
+        operatingSystem: 'Any',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+        description,
+      },
   {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
