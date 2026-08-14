@@ -161,6 +161,7 @@ const showSelect = defaultPattern === 'all';
   }
   .sc-months :global(table) {
     width: 100%;
+    table-layout: fixed;
     border-collapse: collapse;
     border: 1px solid var(--rule);
     background: var(--surface);
@@ -175,7 +176,11 @@ const showSelect = defaultPattern === 'all';
     text-align: left;
     padding: 0.35rem 0.2rem;
   }
+  /* 전역 표 스타일(text-align:left, 비대칭 패딩, 밑줄)을 달력 셀에서 무효화 */
   .sc-months :global(th) {
+    font-family: inherit;
+    text-align: center;
+    letter-spacing: 0;
     color: var(--muted);
     font-weight: 500;
     font-size: 0.75rem;
@@ -185,6 +190,7 @@ const showSelect = defaultPattern === 'all';
   .sc-months :global(td) {
     text-align: center;
     padding: 0.3rem 0;
+    border-bottom: 0;
   }
   .sc-months :global(td.d) { background: var(--cal-day); }
   .sc-months :global(td.n) { background: var(--cal-night); }
