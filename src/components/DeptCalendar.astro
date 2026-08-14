@@ -37,8 +37,13 @@ const { cycle, anchor, platoons, shiftLabel, icsName } = Astro.props;
 
   <section class="dc-calwrap" hidden>
     <div class="dc-legend"><span><i class="dc-swatch"></i> On duty</span><span><i class="dc-swatch dc-hol"></i> Federal holiday</span></div>
+    <p class="dc-print-title" aria-hidden="true"></p>
     <div class="dc-months"></div>
-    <button type="button" class="dc-ics">Add to my phone calendar (.ics)</button>
+    <div class="dc-actions">
+      <button type="button" class="dc-ics">Add to my phone calendar (.ics)</button>
+      <button type="button" class="dc-print">Print wall calendar</button>
+      <button type="button" class="dc-csv">Download spreadsheet (.csv)</button>
+    </div>
   </section>
 </div>
 
@@ -138,8 +143,16 @@ const { cycle, anchor, platoons, shiftLabel, icsName } = Astro.props;
   .dc-months :global(td) { text-align: center; padding: 0.3rem 0; border-bottom: 0; }
   .dc-months :global(td.on) { background: var(--ans-work); }
   .dc-months :global(td.hol) { box-shadow: inset 0 0 0 2px var(--cal-holiday); }
-  .dc-ics {
+  .dc-print-title {
+    display: none;
+  }
+  .dc-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
     margin-top: 1.25rem;
+  }
+  .dc-actions button {
     padding: 0.7rem 1rem;
     border: 1.5px solid var(--accent);
     border-radius: 4px;
@@ -152,7 +165,7 @@ const { cycle, anchor, platoons, shiftLabel, icsName } = Astro.props;
     font-size: 0.95rem;
     cursor: pointer;
   }
-  .dc-ics:hover {
+  .dc-actions button:hover {
     background: var(--accent);
     color: var(--btn-text);
   }
@@ -160,7 +173,7 @@ const { cycle, anchor, platoons, shiftLabel, icsName } = Astro.props;
 
 <script>
   import { holidaysBetween } from '../lib/holidays';
-  import { downloadIcs, type CalendarEvent } from '../lib/ics';
+  import { downloadIcs, downloadCsv, type CalendarEvent } from '../lib/ics';
 
   const MS_PER_DAY = 86_400_000;
 
@@ -232,8 +245,19 @@ const { cycle, anchor, platoons, shiftLabel, icsName } = Astro.props;
       }
       wrap.hidden = false;
 
+      root.querySelector<HTMLElement>('.dc-print-title')!.textContent =
+        `${platoon} Platoon — 12-month duty calendar (made with ShiftCal)`;
       wrap.querySelector<HTMLButtonElement>('.dc-ics')!.onclick = () =>
         downloadIcs(events, `${root.dataset.icsName}-${platoon}.ics`);
+      wrap.querySelector<HTMLButtonElement>('.dc-csv')!.onclick = () =>
+        downloadCsv(events, `${root.dataset.icsName}-${platoon}.csv`);
+      wrap.querySelector<HTMLButtonElement>('.dc-print')!.onclick = () => {
+        document.body.classList.add('print-cal');
+        window.addEventListener('afterprint', () => document.body.classList.remove('print-cal'), {
+          once: true,
+        });
+        window.print();
+      };
     });
   }
 </script>

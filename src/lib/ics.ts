@@ -31,11 +31,28 @@ export function buildIcs(events: CalendarEvent[], calendarName = 'ShiftCal'): st
   return lines.join('\r\n');
 }
 
-export function downloadIcs(events: CalendarEvent[], filename: string): void {
-  const blob = new Blob([buildIcs(events)], { type: 'text/calendar' });
+function download(content: string, mime: string, filename: string): void {
+  const blob = new Blob([content], { type: mime });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = filename;
   a.click();
   URL.revokeObjectURL(a.href);
+}
+
+export function downloadIcs(events: CalendarEvent[], filename: string): void {
+  download(buildIcs(events), 'text/calendar', filename);
+}
+
+/** 스프레드시트용 CSV (Date, Weekday, Shift) */
+export function downloadCsv(events: CalendarEvent[], filename: string): void {
+  const rows = ['Date,Weekday,Shift'];
+  for (const ev of events) {
+    const iso = `${ev.date.getFullYear()}-${String(ev.date.getMonth() + 1).padStart(2, '0')}-${String(
+      ev.date.getDate(),
+    ).padStart(2, '0')}`;
+    const weekday = ev.date.toLocaleDateString('en-US', { weekday: 'short' });
+    rows.push(`${iso},${weekday},"${ev.title.replace(/"/g, '""')}"`);
+  }
+  download(rows.join('\r\n'), 'text/csv', filename);
 }

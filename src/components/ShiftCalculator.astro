@@ -58,8 +58,13 @@ const showSelect = defaultPattern === 'all';
       <span><i class="sc-swatch sw-h"></i> Holiday</span>
       <span><i class="sc-swatch sw-p"></i> Payday</span>
     </div>
+    <p class="sc-print-title" aria-hidden="true"></p>
     <div class="sc-months"></div>
-    <button type="button" class="sc-ics">Add to my phone calendar (.ics)</button>
+    <div class="sc-actions">
+      <button type="button" class="sc-ics">Add to my phone calendar (.ics)</button>
+      <button type="button" class="sc-print">Print wall calendar</button>
+      <button type="button" class="sc-csv">Download spreadsheet (.csv)</button>
+    </div>
   </section>
 </div>
 
@@ -198,8 +203,16 @@ const showSelect = defaultPattern === 'all';
   .sc-months :global(td.pay) { background: var(--cal-pay); }
   .sc-months :global(td.d.pay) { background: linear-gradient(135deg, var(--cal-day) 55%, var(--cal-pay) 45%); }
   .sc-months :global(td.n.pay) { background: linear-gradient(135deg, var(--cal-night) 55%, var(--cal-pay) 45%); }
-  .sc-ics {
+  .sc-print-title {
+    display: none;
+  }
+  .sc-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
     margin-top: 1.25rem;
+  }
+  .sc-actions button {
     padding: 0.7rem 1rem;
     border: 1.5px solid var(--accent);
     border-radius: 4px;
@@ -212,7 +225,7 @@ const showSelect = defaultPattern === 'all';
     font-size: 0.95rem;
     cursor: pointer;
   }
-  .sc-ics:hover {
+  .sc-actions button:hover {
     background: var(--accent);
     color: var(--btn-text);
   }
@@ -221,7 +234,7 @@ const showSelect = defaultPattern === 'all';
 <script>
   import { PATTERNS, patternBySlug, shiftOn, type ShiftPattern, type ShiftCode } from '../lib/shiftPatterns';
   import { holidaysBetween } from '../lib/holidays';
-  import { downloadIcs, type CalendarEvent } from '../lib/ics';
+  import { downloadIcs, downloadCsv, type CalendarEvent } from '../lib/ics';
 
   const MS_PER_DAY = 86_400_000;
   const STORAGE_KEY = 'shiftcal:config';
@@ -323,8 +336,19 @@ const showSelect = defaultPattern === 'all';
     }
     wrap.hidden = false;
 
-    const icsBtn = wrap.querySelector<HTMLButtonElement>('.sc-ics')!;
-    icsBtn.onclick = () => downloadIcs(events, `shiftcal-${pattern.slug}.ics`);
+    root.querySelector<HTMLElement>('.sc-print-title')!.textContent =
+      `${pattern.name} — 12-month shift calendar (made with ShiftCal)`;
+    wrap.querySelector<HTMLButtonElement>('.sc-ics')!.onclick = () =>
+      downloadIcs(events, `shiftcal-${pattern.slug}.ics`);
+    wrap.querySelector<HTMLButtonElement>('.sc-csv')!.onclick = () =>
+      downloadCsv(events, `shiftcal-${pattern.slug}.csv`);
+    wrap.querySelector<HTMLButtonElement>('.sc-print')!.onclick = () => {
+      document.body.classList.add('print-cal');
+      window.addEventListener('afterprint', () => document.body.classList.remove('print-cal'), {
+        once: true,
+      });
+      window.print();
+    };
 
     localStorage.setItem(
       STORAGE_KEY,

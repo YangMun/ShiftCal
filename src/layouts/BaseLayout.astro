@@ -493,4 +493,46 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     border-top: 1px solid var(--rule);
     color: var(--muted);
   }
+
+  /* ── 인쇄용 벽 달력: "Print wall calendar" 버튼이 body.print-cal을 켠다 ── */
+  @media print {
+    body.print-cal {
+      background: #fff;
+      color: #000;
+    }
+    body.print-cal .site-header,
+    body.print-cal .site-footer,
+    body.print-cal article > :not(.shiftcal):not(.deptcal),
+    body.print-cal .sc-form,
+    body.print-cal .sc-answers,
+    body.print-cal .sc-actions,
+    body.print-cal .dc-form,
+    body.print-cal .dc-answers,
+    body.print-cal .dc-actions {
+      display: none !important;
+    }
+    body.print-cal .sc-print-title,
+    body.print-cal .dc-print-title {
+      display: block !important;
+      font-family: 'Barlow Semi Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 14pt;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin: 0 0 0.5rem;
+    }
+    body.print-cal .sc-months,
+    body.print-cal .dc-months {
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 0.4rem !important;
+    }
+    body.print-cal .sc-months table,
+    body.print-cal .dc-months table {
+      break-inside: avoid;
+    }
+    body.print-cal * {
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+  }
 </style>
