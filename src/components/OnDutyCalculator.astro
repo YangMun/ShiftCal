@@ -63,6 +63,7 @@ const showSelect = defaultPattern === 'all';
     <div class="sc-actions">
       <button type="button" class="sc-ics">Add to my phone calendar (.ics)</button>
       <button type="button" class="sc-print">Print wall calendar</button>
+      <button type="button" class="sc-png">Save calendar image (.png)</button>
       <button type="button" class="sc-csv">Download spreadsheet (.csv)</button>
     </div>
   </section>
@@ -235,6 +236,7 @@ const showSelect = defaultPattern === 'all';
   import { PATTERNS, patternBySlug, shiftOn, type ShiftPattern, type ShiftCode } from '../lib/shiftPatterns';
   import { holidaysBetween } from '../lib/holidays';
   import { downloadIcs, downloadCsv, type CalendarEvent } from '../lib/ics';
+  import { downloadCalendarPng } from '../lib/calendarImage';
 
   const MS_PER_DAY = 86_400_000;
   const STORAGE_KEY = 'shiftcal:config';
@@ -340,6 +342,20 @@ const showSelect = defaultPattern === 'all';
       `${pattern.name} — 12-month shift calendar (made with OnDutyCal)`;
     wrap.querySelector<HTMLButtonElement>('.sc-ics')!.onclick = () =>
       downloadIcs(events, `ondutycal-${pattern.slug}.ics`);
+    wrap.querySelector<HTMLButtonElement>('.sc-png')!.onclick = () =>
+      downloadCalendarPng({
+        title: `${pattern.name} — 12-month calendar`,
+        start,
+        classify: (date) => {
+          const code = effectiveCode(pattern, dayNight, shiftOn(pattern, anchor, date));
+          return {
+            fill: code === 'O' ? undefined : code === 'N' ? 'night' : 'day',
+            pay: isPayday(payAnchor, date),
+            holiday: holidaysBetween(date, date).length > 0,
+          };
+        },
+        filename: `ondutycal-${pattern.slug}.png`,
+      });
     wrap.querySelector<HTMLButtonElement>('.sc-csv')!.onclick = () =>
       downloadCsv(events, `ondutycal-${pattern.slug}.csv`);
     wrap.querySelector<HTMLButtonElement>('.sc-print')!.onclick = () => {

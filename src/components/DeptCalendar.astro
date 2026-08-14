@@ -42,6 +42,7 @@ const { cycle, anchor, platoons, shiftLabel, icsName } = Astro.props;
     <div class="dc-actions">
       <button type="button" class="dc-ics">Add to my phone calendar (.ics)</button>
       <button type="button" class="dc-print">Print wall calendar</button>
+      <button type="button" class="dc-png">Save calendar image (.png)</button>
       <button type="button" class="dc-csv">Download spreadsheet (.csv)</button>
     </div>
   </section>
@@ -174,6 +175,7 @@ const { cycle, anchor, platoons, shiftLabel, icsName } = Astro.props;
 <script>
   import { holidaysBetween } from '../lib/holidays';
   import { downloadIcs, downloadCsv, type CalendarEvent } from '../lib/ics';
+  import { downloadCalendarPng } from '../lib/calendarImage';
 
   const MS_PER_DAY = 86_400_000;
 
@@ -249,6 +251,16 @@ const { cycle, anchor, platoons, shiftLabel, icsName } = Astro.props;
         `${platoon} Platoon — 12-month duty calendar (made with OnDutyCal)`;
       wrap.querySelector<HTMLButtonElement>('.dc-ics')!.onclick = () =>
         downloadIcs(events, `${root.dataset.icsName}-${platoon}.ics`);
+      wrap.querySelector<HTMLButtonElement>('.dc-png')!.onclick = () =>
+        downloadCalendarPng({
+          title: `${platoon} Platoon — 12-month duty calendar`,
+          start,
+          classify: (date) => ({
+            fill: onDuty(cycle, anchor, platoon, date) ? 'duty' : undefined,
+            holiday: holidaysBetween(date, date).length > 0,
+          }),
+          filename: `${root.dataset.icsName}-${platoon}.png`,
+        });
       wrap.querySelector<HTMLButtonElement>('.dc-csv')!.onclick = () =>
         downloadCsv(events, `${root.dataset.icsName}-${platoon}.csv`);
       wrap.querySelector<HTMLButtonElement>('.dc-print')!.onclick = () => {
