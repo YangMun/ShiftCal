@@ -5,6 +5,8 @@ export type ShiftCode = 'D' | 'N' | 'O';
 export interface ShiftPattern {
   slug: string;
   name: string;
+  /** 카드/헤더용 짧은 코드 표기 */
+  code: string;
   /** URL 경로 (기획서의 페이지 슬러그) */
   path: string;
   /** 반복 주기 (일 단위) */
@@ -20,6 +22,7 @@ export interface ShiftPattern {
 export const PATTERNS: ShiftPattern[] = [
   {
     slug: '2-2-3-panama',
+    code: '2-2-3',
     name: '2-2-3 (Panama) Schedule',
     path: '/2-2-3-panama-schedule-calculator',
     // 14일 주기: 2 on, 2 off, 3 on, 2 off, 2 on, 3 off
@@ -31,6 +34,7 @@ export const PATTERNS: ShiftPattern[] = [
   },
   {
     slug: 'pitman',
+    code: 'PITMAN',
     name: 'Pitman Schedule',
     path: '/pitman-schedule-calculator',
     cycle: ['D', 'D', 'O', 'O', 'D', 'D', 'D', 'O', 'O', 'D', 'D', 'O', 'O', 'O'],
@@ -41,6 +45,7 @@ export const PATTERNS: ShiftPattern[] = [
   },
   {
     slug: 'dupont',
+    code: 'DUPONT',
     name: 'DuPont Schedule',
     path: '/dupont-schedule-calculator',
     // 28일 주기: 4N, 3O, 3D, 1O, 3N, 3O, 4D, 7O
@@ -57,6 +62,7 @@ export const PATTERNS: ShiftPattern[] = [
   },
   {
     slug: '4-on-4-off',
+    code: '4 ON 4',
     name: '4 On 4 Off Schedule',
     path: '/4-on-4-off-schedule-calculator',
     cycle: ['D', 'D', 'D', 'D', 'O', 'O', 'O', 'O'],
@@ -67,6 +73,7 @@ export const PATTERNS: ShiftPattern[] = [
   },
   {
     slug: '48-96',
+    code: '48/96',
     name: '48/96 Shift Schedule',
     path: '/48-96-shift-calendar',
     cycle: ['D', 'D', 'O', 'O', 'O', 'O'],
@@ -77,6 +84,7 @@ export const PATTERNS: ShiftPattern[] = [
   },
   {
     slug: 'cal-fire',
+    code: '3 ON 4',
     name: '3 On 4 Off (CAL FIRE-style)',
     path: '/cal-fire-shift-calendar',
     cycle: ['D', 'D', 'D', 'O', 'O', 'O', 'O'],
@@ -87,6 +95,7 @@ export const PATTERNS: ShiftPattern[] = [
   },
   {
     slug: 'kelly',
+    code: 'KELLY',
     name: 'Kelly Schedule',
     path: '/kelly-schedule-calculator',
     // 9일 주기: 24h on/off 3회 후 4일 휴무

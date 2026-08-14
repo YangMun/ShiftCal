@@ -45,13 +45,16 @@ const faqs = [
     handful of standard rotations. If you are not sure which one you are on, the shape of your week
     usually gives it away:
   </p>
-  <ul>
+  <div class="pattern-grid">
     {PATTERNS.map((p) => (
-      <li>
-        <a href={p.path}>{p.name}</a> — {p.description}
-      </li>
+      <a class="pattern-card" href={p.path}>
+        <span class="pattern-code">{p.code}</span>
+        <span class="pattern-name">{p.name}</span>
+        <span class="pattern-desc">{p.description}</span>
+        <span class="pattern-spec">{p.cycle.length}-day cycle · {p.shiftLength}h shifts</span>
+      </a>
     ))}
-  </ul>
+  </div>
   <p>
     Each calculator page explains how that rotation actually works — cycle length, how many crews it
     takes, what your weekends look like, and the questions workers on that schedule ask most (like
@@ -78,3 +81,50 @@ const faqs = [
     <a href="/shift-differential-calculator">shift differential calculator</a>.
   </p>
 </ToolPage>
+
+<style>
+  .pattern-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: 0.9rem;
+    margin: 1.25rem 0;
+  }
+  .pattern-card {
+    display: grid;
+    gap: 0.25rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    background: var(--surface);
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .pattern-card:hover {
+    border-color: var(--accent);
+    color: var(--ink);
+  }
+  .pattern-code {
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.9rem;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    color: var(--accent-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .pattern-name {
+    font-weight: 650;
+  }
+  .pattern-desc {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  .pattern-spec {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+    border-top: 1px solid var(--rule);
+    padding-top: 0.45rem;
+    margin-top: 0.35rem;
+  }
+</style>

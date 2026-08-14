@@ -1,4 +1,11 @@
 ---
+import '@fontsource/barlow-semi-condensed/600.css';
+import '@fontsource/barlow-semi-condensed/700.css';
+import '@fontsource-variable/public-sans';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import { PATTERNS } from '../lib/shiftPatterns';
+
 interface Props {
   title: string;
   description: string;
@@ -17,38 +24,466 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <meta name="color-scheme" content="light dark" />
+    {/* FOUC 방지: 저장된 테마를 파싱 시점에 적용 */}
+    <script is:inline>
+      (function () {
+        try {
+          var t = localStorage.getItem('shiftcal:theme');
+          if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+        } catch (e) {}
+      })();
+    </script>
     {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
   </head>
   <body>
-    <header>
-      <nav><a href="/">ShiftCal</a></nav>
+    <header class="site-header">
+      <div class="shell header-row">
+        <a class="wordmark" href="/" aria-label="ShiftCal home">
+          <svg class="mark" viewBox="0 0 20 20" aria-hidden="true">
+            <rect x="1" y="1" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2" />
+            <line x1="1" y1="7" x2="19" y2="7" stroke="currentColor" stroke-width="2" />
+            <rect class="mark-dot" x="11" y="10" width="5" height="5" />
+          </svg>
+          Shift<span>Cal</span>
+        </a>
+        <nav class="site-nav" aria-label="Main">
+          <a href="/">Patterns</a>
+          <a href="/firefighter-shift-calendar">Fire&nbsp;depts</a>
+          <a href="/shift-differential-calculator">Pay</a>
+          <button id="theme-toggle" type="button" aria-label="Switch color theme">Auto</button>
+        </nav>
+      </div>
     </header>
-    <main>
+
+    <main class="shell">
       <slot />
     </main>
-    <footer>
-      <a href="/about">About</a> · <a href="/privacy">Privacy Policy</a> · <a href="/contact">Contact</a>
+
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div>
+          <p class="foot-label">Rotation calculators</p>
+          <ul>
+            {PATTERNS.map((p) => (
+              <li><a href={p.path}>{p.name}</a></li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <p class="foot-label">Fire departments</p>
+          <ul>
+            <li><a href="/houston-fire-department-shift-calendar">Houston Fire Department</a></li>
+            <li><a href="/la-county-fire-shift-calendar">LA County Fire</a></li>
+            <li><a href="/firefighter-shift-calendar">All firefighter calendars</a></li>
+          </ul>
+          <p class="foot-label">Holidays</p>
+          <ul>
+            <li><a href="/am-i-working-on-christmas">Am I working on Christmas?</a></li>
+            <li><a href="/am-i-working-on-thanksgiving">Am I working on Thanksgiving?</a></li>
+            <li><a href="/rotating-shift-calendar-2027">2027 shift calendars</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="foot-label">Pay &amp; life</p>
+          <ul>
+            <li><a href="/shift-differential-calculator">Shift differential &amp; OT</a></li>
+            <li><a href="/biweekly-payday-calculator">Biweekly paydays</a></li>
+            <li><a href="/12-hour-shift-yearly-hours-calculator">Yearly hours</a></li>
+            <li><a href="/nurse-shift-pay-calculator">Nurse shift pay</a></li>
+            <li><a href="/night-shift-sleep-calculator">Night shift sleep</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="shell footer-meta">
+        <p>
+          Every calculation runs in your browser — no accounts, no uploads.
+          Independent tool; not affiliated with any department or employer.
+        </p>
+        <p>
+          <a href="/about">About</a> · <a href="/privacy">Privacy Policy</a> · <a href="/contact">Contact</a>
+        </p>
+      </div>
     </footer>
+
+    <script>
+      // 3상태 테마 토글: Auto(system) → Dark → Light
+      const KEY = 'shiftcal:theme';
+      const btn = document.getElementById('theme-toggle');
+      const order = ['auto', 'dark', 'light'];
+      const label: Record<string, string> = { auto: 'Auto', dark: 'Dark', light: 'Light' };
+
+      function current(): string {
+        const t = document.documentElement.dataset.theme;
+        return t === 'dark' || t === 'light' ? t : 'auto';
+      }
+      function apply(mode: string): void {
+        if (mode === 'auto') {
+          delete document.documentElement.dataset.theme;
+          localStorage.removeItem(KEY);
+        } else {
+          document.documentElement.dataset.theme = mode;
+          localStorage.setItem(KEY, mode);
+        }
+        if (btn) btn.textContent = label[mode]!;
+      }
+      if (btn) {
+        btn.textContent = label[current()]!;
+        btn.addEventListener('click', () => {
+          apply(order[(order.indexOf(current()) + 1) % order.length]!);
+        });
+      }
+    </script>
   </body>
 </html>
 
 <style is:global>
+  /* ── 토큰: 라이트(종이 근무표) ───────────────────────────── */
   :root {
-    --text: #1a1a1a;
-    --bg: #ffffff;
-    --accent: #1d4ed8;
+    --bg: #f5f4f0;
+    --surface: #fffefb;
+    --ink: #1c1e21;
+    --muted: #5a5f66;
+    --rule: #d9d6ce;
+    --accent: #b57400;
+    --accent-ink: #7c5000;
+    --btn-bg: #1c1e21;
+    --btn-text: #f5f4f0;
+    --cal-day: #c9dff6;
+    --cal-night: #cdd2f1;
+    --cal-pay: #c2e5cb;
+    --cal-holiday: #1f7a70;
+    --ans-work: #f3ddcb;
+    --ans-off: #dcebd9;
+    --focus: #b57400;
+  }
+  /* ── 다크(야간 당직실): 시스템 선호 시 ─────────────────── */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+      --bg: #0f1216;
+      --surface: #1a1f26;
+      --ink: #e8e6e0;
+      --muted: #9ba1a8;
+      --rule: #2a313a;
+      --accent: #ffb020;
+      --accent-ink: #ffc95e;
+      --btn-bg: #ffb020;
+      --btn-text: #14161a;
+      --cal-day: #2c4e71;
+      --cal-night: #3b4380;
+      --cal-pay: #2f5b41;
+      --cal-holiday: #4fb8ac;
+      --ans-work: #4a2f23;
+      --ans-off: #24402c;
+      --focus: #ffb020;
+    }
+  }
+  /* ── 다크: 명시적 토글 시 ──────────────────────────────── */
+  :root[data-theme='dark'] {
+    --bg: #0f1216;
+    --surface: #1a1f26;
+    --ink: #e8e6e0;
+    --muted: #9ba1a8;
+    --rule: #2a313a;
+    --accent: #ffb020;
+    --accent-ink: #ffc95e;
+    --btn-bg: #ffb020;
+    --btn-text: #14161a;
+    --cal-day: #2c4e71;
+    --cal-night: #3b4380;
+    --cal-pay: #2f5b41;
+    --cal-holiday: #4fb8ac;
+    --ans-work: #4a2f23;
+    --ans-off: #24402c;
+    --focus: #ffb020;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    * {
+      transition: none !important;
+      animation: none !important;
+    }
   }
   body {
-    margin: 0 auto;
-    max-width: 52rem;
-    padding: 0 1rem;
-    font-family: system-ui, sans-serif;
-    color: var(--text);
+    margin: 0;
     background: var(--bg);
-    line-height: 1.6;
+    color: var(--ink);
+    font-family: 'Public Sans Variable', system-ui, sans-serif;
+    font-size: 1.0625rem;
+    line-height: 1.65;
   }
-  /* 광고 슬롯은 반드시 높이 예약 — CLS(레이아웃 시프트) 방어 */
-  .ad-slot {
-    min-height: 280px;
+  .shell {
+    max-width: 56rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  /* ── 타이포그래피 ─────────────────────────────────────── */
+  h1,
+  h2,
+  h3 {
+    font-family: 'Barlow Semi Condensed', 'Public Sans Variable', sans-serif;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: 0.005em;
+    text-wrap: balance;
+    margin: 0 0 0.6em;
+  }
+  h1 {
+    font-size: clamp(2.1rem, 6vw, 3rem);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  h2 {
+    font-size: 1.45rem;
+    margin-top: 2.2em;
+    padding-top: 1.1em;
+    border-top: 1px solid var(--rule);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  h2:first-of-type {
+    border-top: 0;
+    padding-top: 0;
+  }
+  p {
+    margin: 0 0 1em;
+    max-width: 65ch;
+  }
+  ul {
+    padding-left: 1.2rem;
+  }
+  li {
+    margin-bottom: 0.35em;
+  }
+  a {
+    color: var(--accent-ink);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+  a:hover {
+    color: var(--accent);
+  }
+  strong {
+    font-weight: 650;
+  }
+  small {
+    color: var(--muted);
+  }
+  table {
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+  th,
+  td {
+    text-align: left;
+    padding: 0.4rem 0.9rem 0.4rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  th {
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  /* ── 헤더 ─────────────────────────────────────────────── */
+  .site-header {
+    border-bottom: 1px solid var(--rule);
+    background: var(--bg);
+  }
+  .header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+  }
+  .wordmark {
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--ink);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+  .wordmark span {
+    color: var(--accent);
+  }
+  .mark {
+    width: 1.15em;
+    height: 1.15em;
+  }
+  .mark-dot {
+    fill: var(--accent);
+  }
+  .site-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.95rem;
+  }
+  .site-nav a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .site-nav a:hover {
+    color: var(--accent);
+  }
+  #theme-toggle {
+    font: inherit;
+    color: var(--muted);
+    background: none;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 0.15rem 0.7rem;
+    cursor: pointer;
+    min-width: 4.2rem;
+  }
+  #theme-toggle:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  main.shell {
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+  }
+
+  /* ── 계산기 폼 공통 (도구 페이지 전역) ─────────────────── */
+  .calc-form {
+    display: grid;
+    gap: 0.9rem;
+    padding: 1.25rem;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    background: var(--surface);
+    margin: 1.5rem 0;
+  }
+  .calc-form label {
+    display: grid;
+    gap: 0.3rem;
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .calc-form input,
+  .calc-form select {
+    padding: 0.6rem;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    font-family: 'Public Sans Variable', system-ui, sans-serif;
+    font-size: 1.05rem;
+    font-variant-numeric: tabular-nums;
+    background: var(--bg);
+    color: var(--ink);
+  }
+  .calc-form button,
+  button[type='submit'] {
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 4px;
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 1.05rem;
+    cursor: pointer;
+  }
+  .calc-form button:hover,
+  button[type='submit']:hover {
+    filter: brightness(1.1);
+  }
+  .calc-result {
+    padding: 1.1rem 1.25rem;
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--accent);
+    border-radius: 4px;
+    background: var(--surface);
+    margin-bottom: 1.25rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .calc-result ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.3rem;
+  }
+  .calc-result li.three {
+    font-weight: 700;
+    color: var(--accent-ink);
+  }
+
+  /* ── 푸터 ─────────────────────────────────────────────── */
+  .site-footer {
+    border-top: 1px solid var(--rule);
+    background: var(--surface);
+    padding: 2rem 0 2.5rem;
+    font-size: 0.95rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1.5rem;
+  }
+  .foot-label {
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin: 1.2em 0 0.4em;
+  }
+  .footer-grid div > .foot-label:first-child {
+    margin-top: 0;
+  }
+  .footer-grid ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .footer-grid a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .footer-grid a:hover {
+    color: var(--accent);
+  }
+  .footer-meta {
+    margin-top: 2rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--rule);
+    color: var(--muted);
   }
 </style>

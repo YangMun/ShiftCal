@@ -73,53 +73,6 @@ const faqs = [
   </p>
 </ToolPage>
 
-<style>
-  .calc-form {
-    display: grid;
-    gap: 0.75rem;
-    padding: 1rem;
-    border: 1px solid #d4d4d8;
-    border-radius: 10px;
-    background: #f8fafc;
-    margin: 1.5rem 0;
-  }
-  .calc-form label {
-    display: grid;
-    gap: 0.25rem;
-    font-weight: 600;
-  }
-  .calc-form input {
-    padding: 0.5rem;
-    border: 1px solid #a1a1aa;
-    border-radius: 6px;
-    font-size: 1rem;
-  }
-  .calc-form button {
-    padding: 0.7rem;
-    border: none;
-    border-radius: 8px;
-    background: var(--accent, #1d4ed8);
-    color: #fff;
-    font-weight: 700;
-    font-size: 1.05rem;
-    cursor: pointer;
-  }
-  .calc-result {
-    padding: 1rem;
-    border-radius: 10px;
-    background: #eff6ff;
-    margin-bottom: 1rem;
-  }
-  .calc-result :global(ul) {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    gap: 0.3rem;
-  }
-  .calc-result :global(li.three) {
-    font-weight: 700;
-  }
-</style>
 
 <script>
   import { federalHolidays } from '../lib/holidays';
