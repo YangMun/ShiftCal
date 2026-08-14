@@ -24,7 +24,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="color-scheme" content="light dark" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="ShiftCal" />
+    <meta name="twitter:card" content="summary" />
     {/* FOUC 방지: 저장된 테마를 파싱 시점에 적용 */}
     <script is:inline>
       (function () {
