@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { PATTERNS } from '../lib/shiftPatterns';
+---
+
+<BaseLayout
+  title="Page Not Found — ShiftCal"
+  description="That page doesn't exist. Find your shift schedule calculator here."
+>
+  <h1>Page not found</h1>
+  <p>That page doesn't exist — but your rotation probably does:</p>
+  <ul>
+    {PATTERNS.map((p) => (
+      <li><a href={p.path}>{p.name}</a></li>
+    ))}
+  </ul>
+  <p><a href="/">← Back to the universal shift calculator</a></p>
+</BaseLayout>
