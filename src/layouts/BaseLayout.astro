@@ -14,6 +14,8 @@ interface Props {
 }
 const { title, description, schema } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+// 애드센스 스크립트 — 빌드 변수에서 주입(저장소에 ID 미포함). 승인 전에는 비활성.
+const adsensePub = import.meta.env.ADSENSE_PUB ?? process.env.ADSENSE_PUB;
 ---
 
 <!doctype html>
@@ -32,6 +34,16 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content="OnDutyCal" />
     <meta name="twitter:card" content="summary" />
+    {
+      adsensePub && (
+        <script
+          is:inline
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-${adsensePub}`}
+          crossorigin="anonymous"
+        />
+      )
+    }
     {/* FOUC 방지: 저장된 테마를 파싱 시점에 적용 */}
     <script is:inline>
       (function () {
