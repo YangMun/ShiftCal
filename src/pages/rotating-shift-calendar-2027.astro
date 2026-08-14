@@ -1,0 +1,79 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import ShiftCalculator from '../components/ShiftCalculator.astro';
+import { PATTERNS } from '../lib/shiftPatterns';
+
+const faqs = [
+  {
+    q: 'Do I need a new anchor date for 2027?',
+    a: 'No. Rotations are continuous — the cycle you are on today runs unbroken into 2027 and beyond. Any workday you know from 2026 anchors your entire 2027 calendar. Only re-anchor if your employer actually resets or reshuffles crews at New Year.',
+  },
+  {
+    q: 'Will my printed 2026 pattern still be right in 2027?',
+    a: 'The pattern is the same; its alignment to weekdays is not. Because no common cycle (6, 8, 9, 14, or 28 days) divides evenly into 365, every rotation drifts against the week from one year to the next — the reason last year\'s printout misleads more than it helps.',
+  },
+  {
+    q: 'Can I get a printable 2027 calendar?',
+    a: 'Generate your calendar and use your browser\'s print function for a paper copy, or better, tap the ICS button — the 12-month export lands every shift in your phone calendar, which is searchable and always with you.',
+  },
+  {
+    q: 'My department publishes its own 2027 shift calendar. Why use this?',
+    a: 'Department PDFs show all platoons on one grid, which is great on the station wall. This tool answers the personal questions a grid cannot: am I working Thanksgiving, which paydays fall in my breaks, and can I get it into my phone in one tap.',
+  },
+];
+---
+
+<ToolPage
+  title="Rotating Shift Calendar 2027 — Every Pattern, Personalized"
+  description="Build your personal 2027 rotating shift calendar for any pattern — 2-2-3 Panama, Pitman, DuPont, 4-on-4-off, 48/96, Kelly. Holidays answered, paydays marked, one-tap export to your phone."
+  h1="Rotating Shift Calendar 2027"
+  faqs={faqs}
+>
+  <p>
+    New year, same cycle — different alignment. Whatever rotation you work, its 2027 shape is
+    already determined by the cycle you are on right now. Pick your pattern, enter any workday you
+    know, and get your personal 2027 (and the rest of 2026) with every federal holiday answered and
+    paydays marked.
+  </p>
+
+  <ShiftCalculator defaultPattern="all" />
+
+  <h2>2027 by rotation, at a glance</h2>
+  <p>
+    2027 starts on a Friday and is not a leap year. Here is what that does to each major pattern:
+  </p>
+  <ul>
+    <li>
+      <a href="/2-2-3-panama-schedule-calculator">2-2-3 / Panama &amp; Pitman</a> — the 14-day cycle
+      slides one position versus 2026; crews effectively swap holiday luck one notch. Full 2027
+      holiday breakdown on the <a href="/2-2-3-schedule-holidays-2027">dedicated 2027 page</a>.
+    </li>
+    <li>
+      <a href="/dupont-schedule-calculator">DuPont</a> — 13 full 28-day cycles almost fit the year
+      (364 days), so your 2027 looks like 2026 shifted by just one day: whatever week held your
+      7-day break drifts one weekday earlier each year.
+    </li>
+    <li>
+      <a href="/4-on-4-off-schedule-calculator">4-on-4-off</a> — the 8-day cycle continues its
+      weekly drift; over 2027 your off-blocks will sweep the weekend roughly every eight weeks, and
+      the sweep dates are fully predictable above.
+    </li>
+    <li>
+      <a href="/48-96-shift-calendar">48/96</a> and <a href="/kelly-schedule-calculator">Kelly</a> —
+      the classic firefighter red/green/black wall calendars get reprinted for 2027, but your
+      platoon's tour dates follow mechanically from any 2026 duty day; department-specific versions
+      are on the <a href="/firefighter-shift-calendar">firefighter calendar hub</a>.
+    </li>
+  </ul>
+
+  <h2>Plan 2027 before it starts</h2>
+  <p>
+    Shift workers get one structural advantage over everyone else: your year is computable in
+    advance. Use it. Generate the calendar, then walk through the four things that decide whether a
+    rotation year feels humane — which holidays you work (trade early for the ones that hurt), where
+    your long breaks fall (aim trips at them instead of spending leave), which school-vacation weeks
+    you already have covered, and where a single well-placed vacation day turns a 3-day break into
+    five. Export to your phone, share it with your family, and let 2027 be the year the schedule
+    stops being a surprise.
+  </p>
+</ToolPage>

@@ -1,0 +1,72 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import ShiftCalculator from '../components/ShiftCalculator.astro';
+
+const faqs = [
+  {
+    q: 'When should I start arranging a Christmas swap?',
+    a: 'The moment you can see the conflict — which this page gives you up to 12 months out. In most 24/7 workplaces the informal rule is first-asked, first-granted, and the colleagues most willing to work December 25 (in exchange for New Year\'s Eve, or for a summer weekend) get claimed by early fall.',
+  },
+  {
+    q: 'Do night shifts on December 24 count as working Christmas?',
+    a: 'On the calendar here, a shift belongs to the day it starts. A night shift starting December 24 runs into Christmas morning, and a night shift starting December 25 means Christmas dinner is your pre-work meal. Families usually care about different halves of the day — check which one your rotation actually takes before burning a swap on it.',
+  },
+  {
+    q: 'Is Christmas premium pay required by law?',
+    a: 'No US federal law requires extra pay for working Christmas; the FLSA treats it as an ordinary workday. Holiday premiums come from your employer\'s policy or a union contract — commonly time-and-a-half or double time. Check yours, then use the shift differential calculator to see what the day is actually worth.',
+  },
+  {
+    q: 'Which rotations are luckiest for Christmas?',
+    a: 'None, over time — that is the honest answer. Every common rotation (2-2-3, Pitman, DuPont, 4-on-4-off, 48/96, Kelly) drifts against the calendar year, so crews take turns. What you can control is knowing early which year is yours.',
+  },
+];
+---
+
+<ToolPage
+  title="Am I Working on Christmas? — Check Your Shift Rotation Instantly"
+  description="Find out in seconds whether your rotating shift schedule has you working Christmas Day — this year and next. Works for 2-2-3, Pitman, DuPont, 4-on-4-off, 48/96, and Kelly rotations."
+  h1="Am I working on Christmas?"
+  faqs={faqs}
+>
+  <p>
+    Every shift worker's December question, answered in ten seconds. Pick your rotation, enter the
+    first day of any work stretch you know, and the list below tells you whether
+    <strong>December 25 is a duty day for your crew</strong> — along with every other US federal
+    holiday in the next 12 months, so you can see the whole holiday season in one look.
+  </p>
+
+  <ShiftCalculator defaultPattern="all" highlightHoliday="Christmas Day" />
+
+  <h2>Why the answer changes every year</h2>
+  <p>
+    Rotating schedules run on cycles of 6, 8, 9, 14, or 28 days — none of which divides into 365. So
+    your rotation drifts against the calendar, and the crew that worked Christmas last year is
+    usually somewhere else in the cycle this year. On a <a href="/2-2-3-panama-schedule-calculator">
+    2-2-3</a>, the 14-day cycle moves by one day each year (two after a leap year); on a
+    <a href="/48-96-shift-calendar">48/96</a>, the six-day cycle lands wherever the drift takes it.
+    Nobody can eyeball this. One anchor date and a calculator can.
+  </p>
+
+  <h2>If the answer is "working" — your options, ranked</h2>
+  <p>
+    <strong>Swap early.</strong> The trade market for December 25 clears months ahead; colleagues
+    without small children often prefer the quiet holiday shift plus a returned favor in July.
+    <strong>Split the day.</strong> If you are on nights, the shift starting December 25 still
+    leaves the morning for presents — many families simply move dinner. <strong>Claim the premium.
+    </strong> If your contract pays double time, a worked Christmas plus an off New Year's may beat
+    the reverse; run your actual numbers in the
+    <a href="/shift-differential-calculator">shift differential calculator</a>.
+    <strong>Aim leave at the cycle.</strong> One well-placed vacation day next to your rotation's
+    natural break can buy a five-day Christmas without touching a swap.
+  </p>
+
+  <h2>Working the season, not just the day</h2>
+  <p>
+    Generate your calendar once and look at the whole stretch from Thanksgiving to New Year's. The
+    common heartbreak is not Christmas itself but discovering that your rotation takes Christmas
+    <em>and</em> New Year's in the same year — which is exactly the case where an early trade fixes
+    both. Export the year to your phone calendar and let your family plan around the facts instead
+    of your best guess. Also check <a href="/am-i-working-on-thanksgiving">Thanksgiving</a> while
+    you are here.
+  </p>
+</ToolPage>

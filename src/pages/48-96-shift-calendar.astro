@@ -1,0 +1,78 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import ShiftCalculator from '../components/ShiftCalculator.astro';
+
+const faqs = [
+  {
+    q: 'What exactly is the 48/96 schedule?',
+    a: 'Two consecutive 24-hour shifts (48 hours on duty), followed by four full days off (96 hours). Three platoons — usually A, B, C — stagger the 6-day cycle so one platoon is always on duty. It has become the dominant schedule in West Coast and mountain-state fire departments.',
+  },
+  {
+    q: 'How many shifts a year is 48/96?',
+    a: 'You are on duty one third of all days: about 121–122 twenty-four-hour shifts per year, or roughly 2,920 duty hours. Most departments schedule around 56 hours per week on average, with FLSA 7(k) work periods governing how overtime is calculated for firefighters.',
+  },
+  {
+    q: 'Is 48/96 better than 24/48?',
+    a: 'Departments that switched report the big win is commuting and recovery: half as many commutes, and a four-day break in which the first day absorbs post-duty fatigue and three real days remain. The concern is fatigue in hour 30–48 of a busy station. Surveys in departments that adopted it (starting with San Diego-area agencies in the 2000s) have generally kept it after trial periods.',
+  },
+  {
+    q: 'My department runs 24/48 — can I still use this page?',
+    a: 'Use this calculator with the toggle set to 48/96, or the Kelly calculator if your department inserts a Kelly day. For a straight 24-on-48-off rotation, the Kelly page explains which variant fits. If your department is Houston, LA County, or CAL FIRE, use the dedicated pre-anchored calendars linked below.',
+  },
+];
+---
+
+<ToolPage
+  title="48/96 Shift Calendar Calculator — Firefighter 12-Month Planner"
+  description="Free 48/96 shift calendar generator. Enter your platoon's first duty day and see every 48-hour tour and 96-hour break for 12 months, with holidays answered and paydays marked. Export to your phone."
+  h1="48/96 Shift Calendar"
+  faqs={faqs}
+>
+  <p>
+    The <strong>48/96</strong> — two 24-hour shifts on, four days off — has spread through American
+    fire service faster than any schedule of the last two decades. If you know one duty day, you
+    know them all: enter the first day of any 48-hour tour below and get your platoon's entire year,
+    including which holidays you are on duty and when your paydays land inside your four-day breaks.
+  </p>
+
+  <ShiftCalculator defaultPattern="48-96" />
+
+  <h2>How the three platoons interlock</h2>
+  <p>
+    The cycle is six days long: platoon A takes days 1–2, platoon B days 3–4, platoon C days 5–6,
+    then A again. Every platoon lives the same rhythm, offset by two days. Because six divides
+    cleanly into neither the week nor the month, your duty days precess through the calendar —
+    exactly why firehouse kitchens still have the classic red/green/black shift calendar taped to
+    the fridge. This page is that calendar, but personalized, searchable, a year deep, and exportable
+    to the phone in your pocket.
+  </p>
+  <p>
+    Example: anchor on <em>Tuesday, February 3</em>. You are on duty February 3–4, off February 5–8,
+    on again February 9–10, off February 11–14. Note what that second break contains: Valentine's
+    Day. That is the level of detail spouses actually ask about, and it is invisible on a six-day
+    cycle until you lay it against a real calendar.
+  </p>
+
+  <h2>The 48/96 trade-offs, honestly</h2>
+  <p>
+    The schedule's champions point to half the commutes of 24/48, four-day breaks long enough for a
+    real second job or real rest, and easier trades (a one-for-one swap moves a whole tour). The
+    skeptics point to hours 30 through 48 in a station running calls all night — the back half of a
+    busy 48 is where fatigue policies earn their keep. Departments considering the switch usually
+    trial it for 12 months; if yours is mid-debate, generate a year of 48/96 here next to your
+    current schedule and compare what weekends, school events, and holidays each one costs you.
+  </p>
+
+  <h2>Department-specific calendars</h2>
+  <p>
+    Running the generic pattern is fine, but if you work for one of the departments below, use the
+    pre-anchored pages instead — they are aligned to the department's official published calendar,
+    so you only pick your platoon letter:
+  </p>
+  <ul>
+    <li><a href="/houston-fire-department-shift-calendar">Houston Fire Department shift calendar</a></li>
+    <li><a href="/la-county-fire-shift-calendar">LA County Fire shift calendar</a></li>
+    <li><a href="/cal-fire-shift-calendar">CAL FIRE schedule</a></li>
+    <li><a href="/firefighter-shift-calendar">All firefighter shift calendars</a></li>
+  </ul>
+</ToolPage>

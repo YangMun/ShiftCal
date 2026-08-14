@@ -1,0 +1,180 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import { PATTERNS } from '../lib/shiftPatterns';
+
+const patternData = PATTERNS.map((p) => ({
+  slug: p.slug,
+  name: p.name,
+  workdays: p.cycle.filter((c) => c !== 'O').length,
+  cycleLen: p.cycle.length,
+  shiftLength: p.shiftLength,
+}));
+
+const faqs = [
+  {
+    q: 'How many hours a year is a standard 12-hour rotation?',
+    a: 'Any rotation that has you working half of all days (2-2-3, Pitman, 4-on-4-off) totals about 2,190 hours per year — a 42-hour weekly average, versus 2,080 for a standard 40-hour job. That extra ~110 hours is why many 12-hour sites pay built-in overtime or use slightly shortened shifts.',
+  },
+  {
+    q: 'Why does my W-2 not match rotation math?',
+    a: 'The rotation figure is scheduled hours. Actual paid hours add overtime, held-over shifts, and training, and subtract leave taken. Treat the calculator as your structural baseline, then compare against your pay stubs to see how much extra you really worked.',
+  },
+  {
+    q: 'What does the 42-hour average mean for overtime?',
+    a: 'Under the FLSA, overtime is weekly: 12-hour patterns alternate 36-hour weeks (no OT) and 48-hour weeks (8 OT hours) rather than paying 2 hours every week. Fire departments are different — FLSA section 7(k) lets them use longer work periods with higher thresholds.',
+  },
+  {
+    q: 'Are 24-hour patterns really 56 hours a week?',
+    a: 'The Kelly-type patterns (a third of days on duty) average 56 hours weekly — about 2,920 hours a year, though much of a firefighter\'s duty time is standby and sleep time at the station, which is why their overtime rules and hourly rates are structured differently.',
+  },
+];
+---
+
+<ToolPage
+  title="12-Hour Shift Yearly Hours Calculator — What Your Rotation Really Adds Up To"
+  description="Calculate how many hours per year your 12-hour or 24-hour rotation schedules — 2-2-3, Pitman, DuPont, 4-on-4-off, 48/96, Kelly, or a custom cycle — with weekly averages and overtime context."
+  h1="12-Hour Shift Yearly Hours Calculator"
+  faqs={faqs}
+>
+  <p>
+    "It's just 12-hour shifts" hides a surprisingly slippery number. How many hours does your
+    rotation actually schedule in a year — and how does that compare with the 2,080 hours of a
+    9-to-5? Pick your pattern (or enter any custom cycle) and get the honest total.
+  </p>
+
+  <form id="hours-form" class="calc-form">
+    <label>
+      My rotation
+      <select name="pattern">
+        {patternData.map((p) => (
+          <option value={p.slug}>{p.name}</option>
+        ))}
+        <option value="custom">Custom cycle…</option>
+      </select>
+    </label>
+    <div id="custom-fields" hidden>
+      <label>Shifts worked per cycle<input type="number" name="workdays" min="1" value="7" /></label>
+      <label>Cycle length (days)<input type="number" name="cycleLen" min="1" value="14" /></label>
+      <label>Hours per shift<input type="number" name="shiftLen" min="1" max="24" value="12" /></label>
+    </div>
+    <button type="submit">Calculate yearly hours</button>
+  </form>
+  <div id="hours-result" class="calc-result" hidden></div>
+
+  <h2>The comparison that matters</h2>
+  <p>
+    A standard full-time year is 52 weeks × 40 hours = 2,080 hours. Half-days-on 12-hour rotations
+    schedule ~2,190; third-days-on 24-hour rotations schedule ~2,920. But raw totals mislead
+    without the shape: 2,190 hours arrives as alternating 36- and 48-hour weeks with a three-day
+    weekend every fortnight, while 2,080 arrives as fifty-two identical weeks. Which trade is worth
+    it is personal — what should not be personal opinion is the arithmetic, especially when
+    comparing job offers where one is a rotation and one is straight days.
+  </p>
+
+  <h2>Turning hours into an hourly-rate comparison</h2>
+  <p>
+    To compare a rotation job's salary against a 40-hour job's, divide each salary by its true
+    scheduled hours. A $75,000 rotation at 2,190 hours is $34.25/hour of scheduled time; the same
+    salary at 2,080 hours is $36.06. Then layer on what the rotation adds:
+    <a href="/shift-differential-calculator">night differentials with correct FLSA overtime</a>,
+    built-in OT weeks, and premium holidays. Rotations often win the totals while losing the
+    per-hour figure — the calculator gives you both sides of that ledger.
+  </p>
+
+  <h2>Where the extra hours hide</h2>
+  <p>
+    On <a href="/dupont-schedule-calculator">DuPont</a>, one week per 28-day cycle is a 72-hour
+    week — the yearly total is identical to the other half-on patterns, but the delivery is
+    lumpier. On <a href="/48-96-shift-calendar">48/96</a> and <a href="/kelly-schedule-calculator">
+    Kelly</a>, the 56-hour average includes station standby time, which is why firefighter contracts
+    price hours differently. And every pattern here assumes zero overtime beyond schedule; if your
+    site holds people over routinely, your real number is higher — the schedule is the floor,
+    not the ceiling.
+  </p>
+</ToolPage>
+
+<style>
+  .calc-form {
+    display: grid;
+    gap: 0.75rem;
+    padding: 1rem;
+    border: 1px solid #d4d4d8;
+    border-radius: 10px;
+    background: #f8fafc;
+    margin: 1.5rem 0;
+  }
+  .calc-form label {
+    display: grid;
+    gap: 0.25rem;
+    font-weight: 600;
+  }
+  .calc-form input,
+  .calc-form select {
+    padding: 0.5rem;
+    border: 1px solid #a1a1aa;
+    border-radius: 6px;
+    font-size: 1rem;
+    background: #fff;
+  }
+  #custom-fields {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .calc-form button {
+    padding: 0.7rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--accent, #1d4ed8);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.05rem;
+    cursor: pointer;
+  }
+  .calc-result {
+    padding: 1rem;
+    border-radius: 10px;
+    background: #eff6ff;
+    margin-bottom: 1rem;
+  }
+</style>
+
+<script define:vars={{ patternData }}>
+  const form = document.getElementById('hours-form');
+  const result = document.getElementById('hours-result');
+  const customFields = document.getElementById('custom-fields');
+  const select = form.querySelector('select[name="pattern"]');
+
+  select.addEventListener('change', () => {
+    customFields.hidden = select.value !== 'custom';
+  });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const d = new FormData(form);
+    let workdays, cycleLen, shiftLen, label;
+    if (select.value === 'custom') {
+      workdays = Number(d.get('workdays'));
+      cycleLen = Number(d.get('cycleLen'));
+      shiftLen = Number(d.get('shiftLen'));
+      label = `Custom (${workdays} shifts / ${cycleLen} days, ${shiftLen}h)`;
+    } else {
+      const p = patternData.find((x) => x.slug === select.value);
+      workdays = p.workdays;
+      cycleLen = p.cycleLen;
+      shiftLen = p.shiftLength;
+      label = p.name;
+    }
+    const yearlyShifts = (365.25 * workdays) / cycleLen;
+    const yearlyHours = yearlyShifts * shiftLen;
+    const weeklyAvg = yearlyHours / 52.18;
+    const vs2080 = yearlyHours - 2080;
+    const fmt = (n) => n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+    result.innerHTML = `
+      <p><strong>${label}</strong></p>
+      <p>Shifts per year: <strong>${yearlyShifts.toFixed(1)}</strong></p>
+      <p>Scheduled hours per year: <strong>${fmt(yearlyHours)}</strong></p>
+      <p>Average per week: <strong>${weeklyAvg.toFixed(1)} hours</strong></p>
+      <p>Versus a 40-hour job (2,080 hrs/yr): <strong>${vs2080 >= 0 ? '+' : ''}${fmt(vs2080)} hours</strong></p>`;
+    result.hidden = false;
+  });
+</script>

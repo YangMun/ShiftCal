@@ -1,0 +1,164 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+
+const faqs = [
+  {
+    q: 'What is a three-paycheck month?',
+    a: 'On a biweekly cycle you get 26 paychecks in 52 weeks, but months hold either two or three paydays. Twice a year a month contains three — a structural bonus month that budgeters love, and this calculator highlights yours automatically.',
+  },
+  {
+    q: 'My payday fell on a holiday — when do I get paid?',
+    a: 'Most US employers move a payday that lands on a bank holiday to the preceding business day (ACH does not settle on federal holidays). The calculator flags paydays that collide with federal holidays so you can expect the shift.',
+  },
+  {
+    q: 'Biweekly versus semimonthly — which do I have?',
+    a: 'Biweekly means every 14 days, 26 times a year, always the same weekday — that is what this tool models. Semimonthly means fixed dates like the 15th and last day, 24 times a year, drifting across weekdays. If your last two paydays were exactly 14 days apart, you are biweekly.',
+  },
+  {
+    q: 'Why do shift workers care which payday falls in a break?',
+    a: 'Two reasons: errands are easiest on off-days (banking, bill-paying, big shopping), and overtime from a heavy rotation week lands one to two paychecks later — seeing paydays against your work blocks shows exactly which check carries the fat week.',
+  },
+];
+---
+
+<ToolPage
+  title="Biweekly Payday Calculator — Your Next 26 Paychecks Mapped"
+  description="Enter your last payday and see every biweekly payday for the next 12 months — three-paycheck months highlighted, federal holiday collisions flagged. Made for shift workers."
+  h1="Biweekly Payday Calculator"
+  faqs={faqs}
+>
+  <p>
+    Biweekly pay is simple — every 14 days, forever — but its interaction with the calendar is not:
+    months with three paydays, paydays that collide with bank holidays, and the eternal question of
+    which check the overtime lands on. Enter your most recent payday and get the next 12 months of
+    paydays, annotated.
+  </p>
+
+  <form id="pay-form" class="calc-form">
+    <label>My last payday<input type="date" name="last" required /></label>
+    <button type="submit">Show my paydays</button>
+  </form>
+  <div id="pay-result" class="calc-result" hidden></div>
+
+  <h2>The 26-check rhythm</h2>
+  <p>
+    Fifty-two weeks divided by two gives 26 paychecks — but twelve months can't split 26 evenly, so
+    ten months hold two paydays and two months hold three. Which months get the third check depends
+    only on your cycle's anchor, which is why two coworkers on different anchors have different
+    bonus months. Budgeting folklore treats the third check as "free money"; the more durable trick
+    is to build the monthly budget on two checks and route every third-check automatically to
+    savings or debt — the calculator above tells you exactly which months to set that up for.
+  </p>
+
+  <h2>Paydays and rotations</h2>
+  <p>
+    If you also use the <a href="/">rotation calculator</a>, enter the same payday there and your
+    paydays appear as green marks directly on your shift calendar. Patterns of 14 days —
+    <a href="/2-2-3-panama-schedule-calculator">2-2-3</a> and
+    <a href="/pitman-schedule-calculator">Pitman</a> — lock to the biweekly cycle: payday lands on
+    the same point of your rotation every single time, so it is either always in your break or
+    always on a workday, permanently. Cycles of 6, 8, 9, or 28 days drift against pay periods, so
+    payday tours through your rotation over the year. Neither is better, but knowing which paydays
+    fall on off-days turns "I'll deal with the bank when I can" into a plan.
+  </p>
+
+  <h2>When payday meets a holiday</h2>
+  <p>
+    ACH transfers do not settle on federal holidays, so a payday landing on one usually arrives a
+    business day early (a policy choice — a few employers pay a day late instead). The list above
+    flags every collision in your next 12 months; if your employer's handbook states the rule, you
+    can pencil the real deposit dates months ahead. Holiday-week paychecks are also the ones most
+    likely to carry <a href="/shift-differential-calculator">holiday premium pay</a> — worth a
+    glance to make sure it actually did.
+  </p>
+</ToolPage>
+
+<style>
+  .calc-form {
+    display: grid;
+    gap: 0.75rem;
+    padding: 1rem;
+    border: 1px solid #d4d4d8;
+    border-radius: 10px;
+    background: #f8fafc;
+    margin: 1.5rem 0;
+  }
+  .calc-form label {
+    display: grid;
+    gap: 0.25rem;
+    font-weight: 600;
+  }
+  .calc-form input {
+    padding: 0.5rem;
+    border: 1px solid #a1a1aa;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+  .calc-form button {
+    padding: 0.7rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--accent, #1d4ed8);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.05rem;
+    cursor: pointer;
+  }
+  .calc-result {
+    padding: 1rem;
+    border-radius: 10px;
+    background: #eff6ff;
+    margin-bottom: 1rem;
+  }
+  .calc-result :global(ul) {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.3rem;
+  }
+  .calc-result :global(li.three) {
+    font-weight: 700;
+  }
+</style>
+
+<script>
+  import { federalHolidays } from '../lib/holidays';
+
+  const form = document.getElementById('pay-form') as HTMLFormElement;
+  const result = document.getElementById('pay-result') as HTMLElement;
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const raw = String(new FormData(form).get('last'));
+    const [y, m, d] = raw.split('-').map(Number);
+    let pay = new Date(y!, m! - 1, d!);
+    const end = new Date(pay.getFullYear() + 1, pay.getMonth(), pay.getDate());
+
+    const holidays = [...federalHolidays(pay.getFullYear()), ...federalHolidays(pay.getFullYear() + 1)];
+    const byMonth = new Map<string, string[]>();
+    while (pay <= end) {
+      const key = pay.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      const label = pay.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+      const clash = holidays.find(
+        (h) =>
+          h.date.getFullYear() === pay.getFullYear() &&
+          h.date.getMonth() === pay.getMonth() &&
+          h.date.getDate() === pay.getDate(),
+      );
+      const entry = clash ? `${label} ⚠️ ${clash.name} — expect the deposit a business day early` : label;
+      byMonth.set(key, [...(byMonth.get(key) ?? []), entry]);
+      pay = new Date(pay.getFullYear(), pay.getMonth(), pay.getDate() + 14);
+    }
+
+    let html = '<ul>';
+    for (const [month, days] of byMonth) {
+      const three = days.length >= 3;
+      html += `<li class="${three ? 'three' : ''}">${month}: ${days.join(' · ')}${
+        three ? ' — 💰 three-paycheck month!' : ''
+      }</li>`;
+    }
+    html += '</ul>';
+    result.innerHTML = html;
+    result.hidden = false;
+  });
+</script>

@@ -1,0 +1,77 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import ShiftCalculator from '../components/ShiftCalculator.astro';
+import { federalHolidays } from '../lib/holidays';
+
+const holidays2027 = federalHolidays(2027).map((h) => ({
+  name: h.name,
+  date: h.date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }),
+}));
+
+const faqs = [
+  {
+    q: 'Which 2-2-3 crew works Christmas 2027?',
+    a: 'It depends entirely on where your crew\'s 14-day cycle sits — there is no universal answer, because every workplace anchors its cycle differently. Enter one workday you know in the calculator and the Christmas answer for your crew appears instantly.',
+  },
+  {
+    q: 'Why do holiday outcomes shift by one day each year on a 2-2-3?',
+    a: 'A 365-day year is 26 cycles of 14 days plus one extra day, so each New Year your position in the cycle slides by one (two after a leap year like 2028). That slow drift is why crews take turns with holiday luck over the years.',
+  },
+  {
+    q: 'Can two holidays fall to the same crew in 2027?',
+    a: 'Yes — with eleven federal holidays spread over 26 cycles, clusters happen. The common painful pairing is Thanksgiving plus Christmas in the same year. Generate your calendar to see your full 2027 list before trade season starts.',
+  },
+];
+---
+
+<ToolPage
+  title="2-2-3 Schedule Holidays 2027 — Which Days Is Your Crew Working?"
+  description="Every 2027 US federal holiday checked against your 2-2-3 (Panama) rotation. Enter one known workday and see which 2027 holidays your crew works, then export the year to your phone."
+  h1="2-2-3 Schedule: 2027 Holidays"
+  faqs={faqs}
+>
+  <p>
+    Planning 2027 on a <a href="/2-2-3-panama-schedule-calculator">2-2-3 rotation</a>? The eleven
+    federal holidays below are fixed; whether your crew works them is pure cycle math. Enter one
+    workday you know — even one from this year — and the calculator resolves all of 2027 for your
+    crew, months before the roster is posted on the wall.
+  </p>
+
+  <ShiftCalculator defaultPattern="2-2-3-panama" />
+
+  <h2>US federal holidays in 2027</h2>
+  <table>
+    <thead><tr><th>Holiday</th><th>2027 date</th></tr></thead>
+    <tbody>
+      {holidays2027.map((h) => (
+        <tr><td>{h.name}</td><td>{h.date}</td></tr>
+      ))}
+    </tbody>
+  </table>
+
+  <h2>What 2027 looks like on a 14-day cycle</h2>
+  <p>
+    2027 is a non-leap year that starts on a Friday. For 2-2-3 crews that means two things worth
+    knowing early. First, the July 4 holiday falls on a Sunday — so it lands inside somebody's
+    Friday-to-Sunday work run and inside another crew's golden three-day weekend; which side you are
+    on is decided by your anchor date. Second, Christmas 2027 is a Saturday, the day most 2-2-3
+    variants schedule as part of the weekend run — the exact case where checking early and trading
+    early pays off.
+  </p>
+  <p>
+    Remember that your cycle position slides one day per calendar year: whatever your 2026 holiday
+    season looked like, 2027 is shifted by one day of the cycle, which is often enough to flip a
+    "working" Christmas to an "off" one or vice versa. This is why guessing from last year fails.
+  </p>
+
+  <h2>Use the drift, don't fight it</h2>
+  <p>
+    Once your 2027 calendar is generated, put the year's three or four painful dates on the table at
+    home and decide which ones matter enough to trade for. The strongest trades are cross-holiday
+    (your Thanksgiving for their Christmas) and they are agreed in early fall. For the rest,
+    aim vacation days at the cycle's natural 3-day breaks — one leave day next to a break makes a
+    5-day window. Export the final year to your phone with the ICS button and 2027 is planned before
+    2026 is over. Working a different rotation? See the
+    <a href="/rotating-shift-calendar-2027">all-rotations 2027 calendar hub</a>.
+  </p>
+</ToolPage>

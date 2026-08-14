@@ -1,0 +1,78 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import DeptCalendar from '../components/DeptCalendar.astro';
+
+// 공식 2026 달력 기준: 12일 주기, 2026-01-01 = C (사이클 인덱스 0)
+const LACO_CYCLE = ['C', 'A', 'B', 'A', 'B', 'C', 'A', 'C', 'A', 'B', 'C', 'B'];
+
+const faqs = [
+  {
+    q: 'Is LA County Fire on a 48/96?',
+    a: 'No — a common misconception repeated by scheduling blogs. The county\'s own published work schedule shows a 12-day cycle in which each platoon works four separated 24-hour shifts (on, off, on, off, off, on, off, on) and then gets four consecutive days off. It averages the same 56 hours a week as 48/96, but you never work two tours back to back.',
+  },
+  {
+    q: 'What are the platoon colors?',
+    a: 'On the official calendar A platoon is black, B is red, C is green — the classic fire-service three-color scheme. Pick your letter above; the math is the same regardless of color.',
+  },
+  {
+    q: 'What is the "56-hour corridor" on the official calendar?',
+    a: 'Payroll period boundaries. LACoFD averages 56 duty hours per week, and the yellow corridor bars mark where pay-period accounting starts and stops. They affect paychecks, not which days you work — your duty days are fully determined by the 12-day cycle shown here.',
+  },
+  {
+    q: 'Is this an official LACoFD publication?',
+    a: 'No — it is an independent tool aligned to the official 2026 Work Schedule PDF published by the department, and verified against January and February 2026. For payroll-grade questions use the official document; for "am I on duty on Christmas," this page answers instantly.',
+  },
+];
+---
+
+<ToolPage
+  title="LA County Fire Shift Calendar — A/B/C Platoons, 12 Months"
+  description="Interactive LACoFD shift calendar aligned to the official 2026 work schedule. Pick your platoon (A, B, C) and see every 24-hour duty day for 12 months, holidays answered, exportable to your phone."
+  h1="LA County Fire Shift Calendar"
+  faqs={faqs}
+>
+  <p>
+    The Los Angeles County Fire Department runs one of the more distinctive rotations in American
+    fire service — a <strong>12-day cycle</strong> of four separated 24-hour tours followed by a
+    four-day break. Pick your platoon and see your entire year, aligned to the department's
+    <a href="https://fire.lacounty.gov/wp-content/uploads/2025/11/2026-Shift-Calendar.pdf" rel="noopener">official 2026 Work Schedule</a>.
+  </p>
+
+  <DeptCalendar
+    cycle={LACO_CYCLE}
+    anchor="2026-01-01"
+    platoons={['A', 'B', 'C']}
+    shiftLabel="24-hr Duty Day"
+    icsName="lacofd-shift"
+  />
+
+  <h2>Reading the 12-day cycle</h2>
+  <p>
+    Within each 12-day round, your platoon works day 1, is off day 2, works day 3, gets two days
+    off, works day 6, is off day 7, works day 8 — and then the reward: <strong>four consecutive
+    days off</strong> before the cycle restarts. Three platoons interlock so exactly one is on duty
+    every day of the year. The structure is philosophically the opposite of
+    <a href="/48-96-shift-calendar">48/96</a>: instead of concentrating work into one 48-hour tour,
+    LACoFD separates every tour with at least one recovery day and still delivers a four-day break
+    each cycle. Sleep scientists tend to approve; commuters count the extra round trips.
+  </p>
+  <p>
+    Twelve does not divide into seven, so the cycle drifts through the week — your four-day break
+    sweeps across weekends on a slow, fully predictable schedule that the 12-month view above makes
+    obvious. That predictability is the point of this page: which platoon has Christmas, whose
+    break swallows Thanksgiving weekend, and where your breaks meet a school holiday are all facts
+    you can know today.
+  </p>
+
+  <h2>Notes for planning</h2>
+  <p>
+    A duty day on the calendar is the day your 24-hour tour begins — the tour on the 20th runs into
+    the morning of the 21st, which matters when you are reading the holiday list (a Christmas Eve
+    tour eats Christmas morning). Trades move single tours, so the holiday answers above are also
+    your trade map: generate a teammate's platoon in a second tab and both sides of a swap are on
+    screen. For other departments, see the
+    <a href="/firefighter-shift-calendar">firefighter calendar hub</a> — including
+    <a href="/houston-fire-department-shift-calendar">Houston's four-shift system</a> and the
+    <a href="/cal-fire-shift-calendar">CAL FIRE 3-on-4-off model</a>.
+  </p>
+</ToolPage>

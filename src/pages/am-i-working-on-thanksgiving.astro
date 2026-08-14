@@ -1,0 +1,72 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import ShiftCalculator from '../components/ShiftCalculator.astro';
+
+const faqs = [
+  {
+    q: 'What date is Thanksgiving this year and next?',
+    a: 'Thanksgiving is the fourth Thursday of November: November 26 in 2026, November 25 in 2027, and November 23 in 2028. Because the date moves within a six-day window each year while your rotation drifts on its own cycle, whether you work it is genuinely unpredictable without calculating.',
+  },
+  {
+    q: 'Is working Black Friday the real problem?',
+    a: 'Often, yes. Many shift-worker families travel Thursday through Sunday, so a Friday or Saturday duty day cancels the trip just as surely as Thursday would. Generate your calendar and look at the whole four-day window, not just the Thursday.',
+  },
+  {
+    q: 'Thanksgiving falls in my 3-day work run — can I still make dinner?',
+    a: 'If you are on 12-hour days, dinner usually moves to 7–8 pm and you arrive tired but present; if you are on nights, the meal happens before your shift starts. The unworkable case is a 24-hour tour, which is why firefighter families are famous for firehouse Thanksgiving — many departments cook the full meal at the station.',
+  },
+  {
+    q: 'Should I trade away Thanksgiving to protect Christmas?',
+    a: 'A classic strategy: volunteer for Thanksgiving early, and bank the goodwill (or the explicit trade) for December 25. It works best on rotations where the two holidays fall to different crews — check both dates above before offering.',
+  },
+];
+---
+
+<ToolPage
+  title="Am I Working on Thanksgiving? — Check Your Shift Rotation"
+  description="Check in seconds whether your rotating schedule puts you on duty for Thanksgiving — and the whole 4-day weekend. Works for 2-2-3, Pitman, DuPont, 4-on-4-off, 48/96, and Kelly rotations."
+  h1="Am I working on Thanksgiving?"
+  faqs={faqs}
+>
+  <p>
+    Thanksgiving is the one holiday whose <em>date itself</em> moves — fourth Thursday of November —
+    while your rotation drifts on its own cycle. Enter your pattern and one known workday, and the
+    list below answers Thanksgiving and every other federal holiday for the next 12 months, so the
+    turkey question is settled before anyone books flights.
+  </p>
+
+  <ShiftCalculator defaultPattern="all" highlightHoliday="Thanksgiving" />
+
+  <h2>Think in four-day weekends, not Thursdays</h2>
+  <p>
+    For most families the real unit is Thursday-to-Sunday. A rotation can spare you Thanksgiving
+    itself and still take Friday and Saturday — which, if your people are three states away, cancels
+    the trip anyway. Once your calendar is generated above, read the whole window: on a
+    <a href="/2-2-3-panama-schedule-calculator">2-2-3</a> the long weekend either lands entirely in
+    your 3-day break (jackpot) or gets split by the Friday–Sunday work run; on
+    <a href="/4-on-4-off-schedule-calculator">4-on-4-off</a> the drift means some years hand you all
+    four days free without using a single hour of leave.
+  </p>
+
+  <h2>The shift worker's Thanksgiving playbook</h2>
+  <p>
+    <strong>Working Thursday only?</strong> Move dinner. Most shift families eat their Thanksgiving
+    on the Friday or Saturday inside the off-block — the calculator shows exactly which day that is.
+    <strong>Working nights?</strong> The shift that starts Thursday evening still leaves the
+    afternoon meal intact; protect your pre-shift sleep by eating early.
+    <strong>On a 24-hour tour?</strong> Bring the family to the station if your department allows
+    it — firehouse Thanksgiving is a genuine American tradition, not a consolation prize.
+    <strong>Off but exhausted?</strong> If Thursday is day one after a night run, warn the cook you
+    will be vertical by 2 pm, not 10 am.
+  </p>
+
+  <h2>Trade season starts in September</h2>
+  <p>
+    Thanksgiving trades clear earlier than Christmas ones because travel plans firm up around
+    Labor Day. If the calculator shows you on duty, September is when a swap costs a favor and
+    November is when it costs a big favor. And before you trade, check
+    <a href="/am-i-working-on-christmas">Christmas</a> too — giving away Thanksgiving to a colleague
+    who then covers your December 25 is the best deal in shift work, but only if the cycle actually
+    assigns you both.
+  </p>
+</ToolPage>

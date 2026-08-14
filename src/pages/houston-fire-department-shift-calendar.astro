@@ -1,0 +1,77 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import DeptCalendar from '../components/DeptCalendar.astro';
+
+// 공식 2026 달력 기준: 8일 주기 [A,B,A,B,C,D,C,D], 2026-01-01 = A (사이클 인덱스 0)
+const HFD_CYCLE = ['A', 'B', 'A', 'B', 'C', 'D', 'C', 'D'];
+
+const faqs = [
+  {
+    q: 'What is the HFD rotation exactly?',
+    a: 'Houston Fire runs four shifts (A, B, C, D) on 24-hour tours starting at 6:30 am, repeating an 8-day cycle: A, B, A, B, C, D, C, D. Each shift works 24 on, 24 off, 24 on, then five days off — two tours per 8 days, about 42 base hours per week before debit days.',
+  },
+  {
+    q: 'What are debit days?',
+    a: 'Extra 24-hour tours worked on your partner shift\'s duty day to bring average hours up to contract level (roughly 46.7 per week). Shifts pair A↔C and B↔D, and the official calendar notates each day like "A/C3" — A shift on duty, debit group 3 of C shift also working. Debit groups cycle 1 through 9 across a 72-day duty cycle. This calendar shows your regular tours; confirm your personal debit group with your station.',
+  },
+  {
+    q: 'Is this the official HFD calendar?',
+    a: 'The rotation here is aligned to the official City of Houston 2026 shift calendar (which has run unbroken on the same cycle since at least 2022, per the city\'s published 2022 and 2025 calendars). It is an independent tool, not a city publication — for payroll-grade certainty, cross-check the official PDF linked on this page.',
+  },
+  {
+    q: 'When does a calendar day belong to my shift?',
+    a: 'The letter on a date is the shift that begins its 24-hour tour at 6:30 that morning. If you are D shift and the 14th is a D day, you work 6:30 am on the 14th to 6:30 am on the 15th.',
+  },
+];
+---
+
+<ToolPage
+  title="Houston Fire Department Shift Calendar — A/B/C/D, 12 Months"
+  description="Interactive HFD shift calendar aligned to the official Houston 2026 rotation. Pick your shift (A, B, C, D) and see every 24-hour tour for 12 months, holidays answered, exportable to your phone."
+  h1="Houston Fire Department Shift Calendar"
+  faqs={faqs}
+>
+  <p>
+    The official HFD wall calendar, made personal: pick your shift letter and get every 24-hour
+    tour for the next 12 months — searchable, holiday-answered, and one tap from living in your
+    phone's calendar. Aligned to the City of Houston's published rotation
+    (<a href="https://www.houstontx.gov/fire//firefighterinfo/2026_Shift_Calendar.pdf" rel="noopener">official 2026 PDF</a>).
+  </p>
+
+  <DeptCalendar
+    cycle={HFD_CYCLE}
+    anchor="2026-01-01"
+    platoons={['A', 'B', 'C', 'D']}
+    shiftLabel="24-hr Tour (06:30 start)"
+    icsName="hfd-shift"
+  />
+
+  <h2>How Houston's 8-day cycle works</h2>
+  <p>
+    HFD's rhythm is unusual among big-city departments: instead of three platoons, Houston runs
+    <strong>four</strong>, pairing them across an 8-day cycle — A, B, A, B, C, D, C, D. Your
+    working week feels like: tour, day off, tour, then a five-day break while the other pair (C/D
+    or A/B) carries the load. Two tours per eight days is a light base load on paper (~42 hours a
+    week), which is exactly where <em>debit days</em> come in: extra tours worked on your partner
+    shift's days that lift real hours to contract level. The official calendar tracks those with
+    the "A/C3"-style notation and a 72-day duty cycle per shift pair.
+  </p>
+  <p>
+    Because the cycle has run unbroken for years (the 2022, 2025, and 2026 official calendars all
+    fall on the same arithmetic), this page can project any date — past or future. The practical
+    payoff is the holiday list above: whether Thanksgiving lands on your tour is decided by modular
+    arithmetic nobody should do in their head, and knowing a year out is what makes trades cheap.
+  </p>
+
+  <h2>Living on the 8-day drift</h2>
+  <p>
+    Eight does not divide into seven, so your tour days crawl through the week — the two-tour block
+    that sits on a weekend this cycle sits on Thursday–Friday soon enough. The five-day break is
+    HFD's crown jewel: long enough for real trips without leave, and with the 12-month view you can
+    see which breaks align with school vacations and holidays. Spouses: the ICS export puts every
+    tour in the family calendar, which settles the "are you working that Saturday?" conversation
+    permanently. Firefighters on other rotations can find their department on the
+    <a href="/firefighter-shift-calendar">firefighter calendar hub</a>, or model a generic
+    <a href="/48-96-shift-calendar">48/96</a> or <a href="/kelly-schedule-calculator">Kelly</a>.
+  </p>
+</ToolPage>

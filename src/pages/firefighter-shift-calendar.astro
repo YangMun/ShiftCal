@@ -1,0 +1,79 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import ShiftCalculator from '../components/ShiftCalculator.astro';
+
+const faqs = [
+  {
+    q: 'Which shift schedule do most US fire departments use?',
+    a: 'The three big families are 24/48 and its Kelly-day variants (three platoons, one day on, two off), 48/96 (two days on, four off — the fastest-growing model, especially in the West), and department-specific rotations like Houston\'s four-shift 8-day cycle or LA County\'s 12-day pattern. Nearly all average 56 hours per week; what differs is how the hours clump.',
+  },
+  {
+    q: 'What do the red, green, and black calendar colors mean?',
+    a: 'They are the traditional platoon colors on fire department wall calendars — each platoon reads its own color to find duty days. This site replaces the color-hunting with a personalized calendar: pick your platoon or anchor date and only your shifts are shown.',
+  },
+  {
+    q: 'How does firefighter overtime work with these schedules?',
+    a: 'Under FLSA section 7(k), fire departments may use work periods up to 28 days with an overtime threshold of 212 hours instead of the standard 40-hour week — which is how 56-hour schedules stay affordable. Contracts then layer scheduled overtime, debit days (Houston), or built-in OT (CAL FIRE) on top.',
+  },
+  {
+    q: 'My department is not listed — can I still build my calendar?',
+    a: 'Yes. If you run 48/96, Kelly, or 3-on-4-off, use those calculators with your own anchor date. If your department has a custom cycle you would like added as a pre-anchored page like Houston\'s, use the contact page — official published calendars make it a quick addition.',
+  },
+];
+---
+
+<ToolPage
+  title="Firefighter Shift Calendars — Every Major Rotation, Personalized"
+  description="Interactive firefighter shift calendars: department-anchored pages for Houston FD, LA County Fire, and CAL FIRE, plus 48/96 and Kelly calculators for everyone else. Holidays answered, ICS export."
+  h1="Firefighter Shift Calendars"
+  faqs={faqs}
+>
+  <p>
+    Every firehouse fridge has the color-coded wall calendar. This page is that calendar with the
+    math done for you — pre-anchored to official department rotations where they exist, and
+    anchor-it-yourself calculators for every common pattern. Each one answers the holiday list for
+    your platoon and exports 12 months to your phone.
+  </p>
+
+  <h2>Department calendars (aligned to official rotations)</h2>
+  <ul>
+    <li>
+      <a href="/houston-fire-department-shift-calendar">Houston Fire Department</a> — four shifts
+      (A/B/C/D) on the 8-day cycle, with the debit-day system explained. Aligned to the city's
+      official 2026 calendar.
+    </li>
+    <li>
+      <a href="/la-county-fire-shift-calendar">LA County Fire</a> — three platoons on the
+      distinctive 12-day cycle (not 48/96, whatever the blogs say). Aligned to the county's
+      official 2026 work schedule.
+    </li>
+    <li>
+      <a href="/cal-fire-shift-calendar">CAL FIRE</a> — 3-on/4-off 72-hour tours with the 66-hour
+      transition explained; anchored to your own unit's schedule.
+    </li>
+  </ul>
+
+  <h2>Generic rotations (anchor with one duty day)</h2>
+  <p>
+    Not in those departments? Two of the three national patterns have dedicated calculators — the
+    <a href="/48-96-shift-calendar">48/96</a> (two 24s on, four days off) and the
+    <a href="/kelly-schedule-calculator">Kelly 9-day cycle</a> (every-other-day 24s, then four
+    off). For a straight 24/48 without a Kelly day, use the universal calculator below with a
+    custom anchor — and if your local runs something rarer, the pattern library covers 12-hour
+    rotations too.
+  </p>
+
+  <ShiftCalculator defaultPattern="48-96" />
+
+  <h2>Why fire schedules deserve their own pages</h2>
+  <p>
+    Fire rotations are the hardest of all shift patterns to eyeball because the cycles are long,
+    the platoon interleaving is irregular, and a duty "day" crosses two calendar days. They are
+    also the schedules families plan around hardest: a 24-hour tour on December 24 consumes both
+    Christmas Eve dinner and Christmas morning. The department pages above exist because a
+    pre-anchored calendar answers those questions with zero setup — pick a platoon letter, read
+    the year. If you want your department added, send the official calendar link through the
+    <a href="/contact">contact page</a>; departments with published rotations can be added quickly,
+    and the goal is for every major US department to have its page here by next calendar season.
+  </p>
+</ToolPage>

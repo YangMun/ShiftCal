@@ -1,0 +1,70 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import ShiftCalculator from '../components/ShiftCalculator.astro';
+
+const faqs = [
+  {
+    q: 'Which Kelly schedule does this calculator use?',
+    a: 'The widespread 9-day version: on/off, on/off, on, then four consecutive days off (the "Kelly days"). Some departments run a 24/48 with a separately scheduled Kelly day every few cycles instead — if that is yours, the four-day break will not line up; check the first two weeks against your roster before trusting the year.',
+  },
+  {
+    q: 'What is a "Kelly day" anyway?',
+    a: 'Historically, a scheduled extra day off inserted to pull firefighters\' average weekly hours back under a threshold (often for FLSA 7(k) overtime control). The name comes from Chicago mayor Edward Kelly, whose era popularized the practice. Over time, whole rotations built around those breaks came to be called Kelly schedules.',
+  },
+  {
+    q: 'How many hours does the Kelly schedule average?',
+    a: 'Three 24-hour shifts every nine days is exactly 56 hours per week on average — the classic firefighter figure that FLSA section 7(k) work periods are built around. Departments that want a lower average add extra Kelly days on top.',
+  },
+  {
+    q: 'How is Kelly different from 48/96?',
+    a: 'Same three-platoon staffing, opposite philosophy. Kelly never makes you work two 24s back to back — every duty day is followed by at least one day off — but its long break is four days once per nine, and single days off separate the duty days. 48/96 concentrates work into one hard 48-hour tour to buy a four-day break every six days.',
+  },
+];
+---
+
+<ToolPage
+  title="Kelly Shift Schedule Calculator — 9-Day Cycle, 12-Month Calendar"
+  description="Free Kelly schedule calculator (24-hour shifts, 9-day cycle with 4-day break). Enter one duty day and see your platoon's whole year, with holidays answered and paydays marked. Export to your phone."
+  h1="Kelly Schedule Calculator"
+  faqs={faqs}
+>
+  <p>
+    The <strong>Kelly schedule</strong> is the fire service's alternating rhythm: work a 24, take a
+    day, work a 24, take a day, work a 24 — then four straight days off. Three platoons make it
+    cover every hour of the year. Enter the first duty day of a cycle you know and the calculator
+    unrolls your next 12 months, holidays and paydays included.
+  </p>
+
+  <ShiftCalculator defaultPattern="kelly" />
+
+  <h2>The 9-day cycle in practice</h2>
+  <p>
+    Anchor on <em>Wednesday, April 1</em>: duty April 1, off April 2, duty April 3, off April 4,
+    duty April 5, then your Kelly break April 6–9. April 10 starts the next cycle. Because the cycle
+    is nine days, your duty days crawl backward through the week — the duty-Wednesday of this cycle
+    becomes duty-Friday two cycles later — and your four-day break slowly tours the calendar,
+    sometimes landing on a full weekend, sometimes missing it entirely. A year-long view is the only
+    way to see which breaks are the good ones.
+  </p>
+
+  <h2>Why departments choose Kelly</h2>
+  <p>
+    Its defining virtue is recovery: you never stack two 24-hour tours back to back, so even a
+    call-heavy night is followed by a guaranteed day at home. Crews with long commutes feel the cost
+    (more work-home round trips than 48/96), but sleep researchers tend to prefer Kelly's cadence
+    for exactly the reason commuters dislike it. The 56-hour weekly average also makes payroll
+    predictable — it is the number around which firefighter FLSA overtime periods were designed, and
+    when a department negotiates hours down, it usually does so by sprinkling additional Kelly days
+    rather than redesigning the rotation.
+  </p>
+
+  <h2>Trades, holidays, and the four-day break</h2>
+  <p>
+    On Kelly, a single-shift trade only moves one duty day, so most planning happens around the
+    break: the question is never "can I get Christmas off" so much as "which cycle's break contains
+    Christmas, and whose does". The holiday list above answers your own crew instantly; generate a
+    calendar with a teammate's anchor date and you have both sides of a trade in front of you. When
+    your break aligns with a school vacation or a fishing opener, export the year to your phone
+    calendar and claim it before anyone else does.
+  </p>
+</ToolPage>

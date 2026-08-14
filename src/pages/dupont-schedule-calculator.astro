@@ -1,0 +1,75 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import ShiftCalculator from '../components/ShiftCalculator.astro';
+
+const faqs = [
+  {
+    q: 'Where do I set my anchor date for the DuPont schedule?',
+    a: 'Enter the first night of a four-night run — that is day 1 of the 28-day cycle this calculator uses (4 nights, 3 off, 3 days, 1 off, 3 nights, 3 off, 4 days, 7 off). If you know a different point of your cycle instead, count back to the start of the last four-night block and use that date.',
+  },
+  {
+    q: 'How often do I get the 7-day break?',
+    a: 'Once every 28 days. It is the signature feature of the DuPont rotation: after your four-day stretch, you are off for seven consecutive days — effectively a vacation every month without using leave.',
+  },
+  {
+    q: 'Is DuPont hard on sleep?',
+    a: 'It is one of the tougher rotations for circadian rhythm because you flip between nights and days inside the same month. The single day off between the three-day and three-night blocks is the widely cited pain point. Most veterans protect the first two days of the 7-day break for recovery sleep and plan family time after that.',
+  },
+  {
+    q: 'How many hours per week does DuPont average?',
+    a: 'Across the 28-day cycle you work fourteen 12-hour shifts = 168 hours, which averages exactly 42 hours per week. One week in each cycle is a 72-hour week, which is where overtime and fatigue policies get tested.',
+  },
+];
+---
+
+<ToolPage
+  title="DuPont Shift Schedule Calculator — 28-Day Cycle, 12-Month View"
+  description="Free DuPont schedule calculator. Enter the first night of a 4-night run and see your full 28-day rotation across 12 months — including the monthly 7-day break, holidays answered, and paydays marked."
+  h1="DuPont Schedule Calculator"
+  faqs={faqs}
+>
+  <p>
+    Born in DuPont's chemical plants in the 1950s and still standard across refineries, paper mills,
+    and power stations, the <strong>DuPont schedule</strong> packs day shifts, night shifts, and one
+    glorious seven-day break into every 28-day cycle. It is also the rotation most likely to make you
+    lose track of where you are — which is exactly what this calculator fixes.
+  </p>
+
+  <ShiftCalculator defaultPattern="dupont" />
+
+  <h2>The 28-day cycle, decoded</h2>
+  <p>
+    One full cycle runs: <strong>4 night shifts → 3 off → 3 day shifts → 1 off → 3 night shifts → 3
+    off → 4 day shifts → 7 off</strong>. Four crews run the plant, each starting the cycle a week
+    apart, so every crew is always at a different chapter of the same story. Fourteen 12-hour shifts
+    per cycle works out to a 42-hour weekly average — but lived experience is nothing like an
+    average: one week in four you will work 72 hours, and one week you will work zero.
+  </p>
+  <p>
+    A worked example: anchor your cycle on <em>Monday, September 7</em>. You work nights September
+    7–10, rest September 11–13, work days September 14–16, get the single off day on the 17th, work
+    nights September 18–20, rest September 21–23, work days September 24–27 — and then October opens
+    with your seven-day break, September 28 to October 4. That monthly week off is why crews defend
+    DuPont fiercely despite its fatigue profile.
+  </p>
+
+  <h2>Living with the hard parts</h2>
+  <p>
+    The rotation's two pressure points are the <em>one-day turnaround</em> between day and night
+    blocks and the <em>72-hour week</em>. Because the calculator lays your whole year out, you can
+    see every 72-hour week coming and keep those weeks clear of family commitments, and you can spot
+    which direction a shift trade would need to go to protect a specific date. The seven-day breaks
+    are also visible months ahead — DuPont workers book flights on break weeks instead of burning
+    PTO, and with the 12-month view you can tell exactly which break lines up with a school vacation
+    or a hunting season.
+  </p>
+
+  <h2>Holidays on DuPont</h2>
+  <p>
+    With a 28-day cycle drifting through a 365-day year, holiday luck rotates around the four crews
+    in a way nobody can eyeball. The holiday list above settles it for the next 12 months. One
+    DuPont-specific tip: check whether a "working" holiday falls on your day block or night block —
+    a night shift that starts the evening of a holiday often means you still had the daytime
+    gathering, which changes whether a swap is worth the favor you will owe.
+  </p>
+</ToolPage>

@@ -1,0 +1,69 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import ShiftCalculator from '../components/ShiftCalculator.astro';
+
+const faqs = [
+  {
+    q: 'Why is there no statewide CAL FIRE calendar to pick from?',
+    a: 'Unlike Houston or LA County, CAL FIRE schedules are set at the unit and station level — there is no single statewide platoon rotation to anchor to. That is why this page asks for the first day of one of your own 72-hour tours instead of a platoon letter.',
+  },
+  {
+    q: 'What is the CAL FIRE 66-hour workweek transition?',
+    a: 'Under the 2022 agreement with CAL FIRE Local 2881, the department began moving from the long-standing 72-hour average workweek to 66 hours starting November 1, 2024, phased over several years as thousands of new positions are filled. Mechanically it works out to roughly one fewer 24-hour shift per 28-day work period; the basic 3-on/4-off skeleton remains, so this calculator stays valid — just expect an occasional extra scheduled day off as your unit phases in.',
+  },
+  {
+    q: 'How is CAL FIRE overtime structured?',
+    a: 'Planned overtime is built into the schedule: hours beyond the FLSA threshold for the 28-day work period are paid as overtime, which historically meant roughly 19 OT hours in a typical week under the 72-hour model. During fire season, actual hours can far exceed the base pattern through holdovers and assignments.',
+  },
+  {
+    q: 'Does this work for seasonal firefighters?',
+    a: 'Yes for your base schedule — anchor on any first duty day of a tour. But peak-season staffing, off-forest assignments, and station coverage moves override the base pattern in practice, so treat the calendar as your default rhythm rather than a guarantee in August.',
+  },
+];
+---
+
+<ToolPage
+  title="CAL FIRE Shift Schedule Calendar — 72-Hour Week, 3 On 4 Off"
+  description="Build your CAL FIRE duty calendar: enter the first day of one 3-day (72-hour) tour and see your full year of duty days and 4-day breaks, holidays answered, exportable to your phone."
+  h1="CAL FIRE Shift Calendar"
+  faqs={faqs}
+>
+  <p>
+    CAL FIRE's base rhythm is famous and grueling: <strong>three consecutive 24-hour duty days,
+    then four days off</strong> — the "72-hour workweek" that the department is gradually easing
+    toward 66 hours. Because schedules anchor at the unit level, enter the first day of any tour
+    you know and this page projects your year: every duty block, every four-day break, every
+    holiday answered.
+  </p>
+
+  <ShiftCalculator defaultPattern="cal-fire" />
+
+  <h2>The 3-on/4-off week</h2>
+  <p>
+    The pattern's virtue is its simplicity: a seven-day cycle means your duty days hold the same
+    weekdays for as long as the anchor holds — a crew that starts tours on Mondays keeps
+    Monday-through-Wednesday duty and a Thursday-to-Sunday break, week after week. That makes CAL
+    FIRE one of the few 24-hour schedules where "which days do I work" has a stable answer, and it
+    is why the four-day break feels like a standing long weekend. The cost is the tour itself:
+    72 continuous hours on duty, with sleep whenever the incident load allows.
+  </p>
+  <p>
+    The 2024–2029 transition to a 66-hour average changes the arithmetic, not the shape: roughly
+    one additional day off per 28-day period as staffing grows. Your unit's implementation decides
+    where those extra days land — when yours phases in, keep using this calendar for the base
+    pattern and overlay the scheduled relief days your captain posts.
+  </p>
+
+  <h2>Holidays, fire season, and reality</h2>
+  <p>
+    With a stable weekly anchor, holiday luck is decided once: if your tours sit
+    Monday–Wednesday, you own every Thursday holiday for the life of the anchor — check the list
+    above and you know your Thanksgivings for years, not months. The big caveat is season: base
+    schedules bend during major incidents, and every CAL FIRE family knows August plans are written
+    in pencil. Use the exported calendar for the structure, and treat the breaks from June to
+    October as best-case. Municipal colleagues on other rotations can find theirs on the
+    <a href="/firefighter-shift-calendar">firefighter calendar hub</a> — including
+    <a href="/houston-fire-department-shift-calendar">Houston</a> and
+    <a href="/la-county-fire-shift-calendar">LA County</a> pre-anchored to their official calendars.
+  </p>
+</ToolPage>

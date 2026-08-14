@@ -1,0 +1,154 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+
+const faqs = [
+  {
+    q: 'Is shift differential required by law?',
+    a: 'No. No federal law requires a premium for nights or weekends — differentials come from employer policy or union contracts. What the law (the FLSA) does require is that once a differential is paid, it must be included when calculating your overtime rate.',
+  },
+  {
+    q: 'Why is my overtime not just 1.5 × my base rate?',
+    a: 'Because FLSA overtime is 1.5 × your <em>regular rate</em>, and the regular rate is your total pay for the week (base + differentials + most bonuses) divided by hours worked. If you earned a night differential, your regular rate is higher than your base rate — and so is your legal overtime rate. Payroll systems that apply 1.5 × base to a differential-heavy week are underpaying.',
+  },
+  {
+    q: 'What is a typical shift differential in the US?',
+    a: 'Commonly 5–15% of base rate, or a flat $1–$7 per hour. Healthcare tends to run higher (evenings ~10%, nights ~15–20%, with weekend add-ons); manufacturing often uses flat dollar amounts per hour.',
+  },
+  {
+    q: 'Does this calculator handle a flat weekly bonus?',
+    a: 'Yes — enter it in the bonus field. Nondiscretionary bonuses (attendance, production) must also be folded into the regular rate under the FLSA, which is the second most common payroll mistake after ignoring differentials.',
+  },
+];
+---
+
+<ToolPage
+  title="Shift Differential Calculator — With Correct FLSA Overtime"
+  description="Calculate your real weekly pay with night/weekend shift differentials — including the FLSA regular-rate overtime most calculators get wrong. See what incorrect payroll math costs you."
+  h1="Shift Differential &amp; Overtime Calculator"
+  faqs={faqs}
+>
+  <p>
+    A shift differential does not just raise the hours it applies to — under the FLSA it raises your
+    <strong>overtime rate</strong> too, because overtime must be paid at 1.5 × your
+    <em>regular rate</em> (total weekly earnings ÷ hours), not 1.5 × your base rate. This
+    calculator does the math the legally correct way and shows you the gap versus the shortcut some
+    payroll systems take.
+  </p>
+
+  <form id="diff-form" class="calc-form">
+    <label>Base hourly rate ($)<input type="number" name="base" step="0.01" min="0" required value="25" /></label>
+    <label>Total hours this workweek<input type="number" name="hours" step="0.5" min="0" required value="48" /></label>
+    <label>Differential per hour ($)<input type="number" name="diff" step="0.01" min="0" value="3" /></label>
+    <label>Hours paid at the differential<input type="number" name="diffHours" step="0.5" min="0" value="24" /></label>
+    <label>Nondiscretionary weekly bonus ($)<input type="number" name="bonus" step="0.01" min="0" value="0" /></label>
+    <button type="submit">Calculate my week</button>
+  </form>
+  <div id="diff-result" class="calc-result" hidden></div>
+
+  <h2>How the FLSA regular rate works</h2>
+  <p>
+    The regular rate is simple in principle: add up everything you earned for the week that the law
+    counts (straight-time wages, shift differentials, nondiscretionary bonuses), divide by the hours
+    you worked, and that quotient is the rate your overtime premium is based on. For each hour over
+    40 you are owed an extra 0.5 × regular rate on top of the straight time already included. The
+    US Department of Labor's regulations (29 CFR part 778) spell out that shift differentials
+    <em>cannot</em> be excluded — yet "1.5 × base" remains one of the most common wage errors in
+    24/7 industries, precisely the workplaces where differentials are universal.
+  </p>
+  <p>
+    Worked example: $25 base, 48 hours, $3 night differential on 24 of those hours. Straight-time
+    earnings are 48 × $25 + 24 × $3 = $1,272, so the regular rate is $1,272 ÷ 48 = $26.50. The 8
+    overtime hours earn an extra 8 × $13.25 = $106, for a $1,378 week. The shortcut method pays
+    8 × $12.50 = $100 of premium instead — $6 short in one week, which compounds to real money over
+    a year of rotating nights. If your pay stubs show base-rate overtime in differential weeks, that
+    is a conversation worth having with payroll or your steward.
+  </p>
+
+  <h2>Differentials across industries</h2>
+  <p>
+    Hospitals commonly pay evening (~10%) and night (~15–20%) percentages with weekend add-ons —
+    nurses can model a full week on the <a href="/nurse-shift-pay-calculator">nurse pay
+    calculator</a>. Plants and warehouses lean toward flat $1–$7/hour amounts. Public safety often
+    wraps premiums into contract-defined schedules instead. Whatever yours looks like, the pattern
+    calculators (<a href="/2-2-3-panama-schedule-calculator">2-2-3</a>,
+    <a href="/dupont-schedule-calculator">DuPont</a>) tell you how many night hours a rotation
+    actually contains — multiply that by your differential and you know what a rotation is worth
+    before you bid on it.
+  </p>
+</ToolPage>
+
+<style>
+  .calc-form {
+    display: grid;
+    gap: 0.75rem;
+    padding: 1rem;
+    border: 1px solid #d4d4d8;
+    border-radius: 10px;
+    background: #f8fafc;
+    margin: 1.5rem 0;
+  }
+  .calc-form label {
+    display: grid;
+    gap: 0.25rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .calc-form input {
+    padding: 0.5rem;
+    border: 1px solid #a1a1aa;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+  .calc-form button {
+    padding: 0.7rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--accent, #1d4ed8);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.05rem;
+    cursor: pointer;
+  }
+  .calc-result {
+    padding: 1rem;
+    border-radius: 10px;
+    background: #eff6ff;
+    margin-bottom: 1rem;
+  }
+</style>
+
+<script>
+  const form = document.getElementById('diff-form') as HTMLFormElement;
+  const result = document.getElementById('diff-result') as HTMLElement;
+  const usd = (n: number) => n.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const d = new FormData(form);
+    const base = Number(d.get('base'));
+    const hours = Number(d.get('hours'));
+    const diff = Number(d.get('diff'));
+    const diffHours = Math.min(Number(d.get('diffHours')), hours);
+    const bonus = Number(d.get('bonus'));
+
+    const straight = base * hours + diff * diffHours + bonus;
+    const regularRate = hours > 0 ? straight / hours : 0;
+    const otHours = Math.max(0, hours - 40);
+    const otPremium = 0.5 * regularRate * otHours;
+    const total = straight + otPremium;
+    const naivePremium = 0.5 * base * otHours;
+    const gap = otPremium - naivePremium;
+
+    result.innerHTML = `
+      <p><strong>Regular rate (FLSA):</strong> ${usd(regularRate)}/hr — overtime rate ${usd(regularRate * 1.5)}/hr</p>
+      <p><strong>Straight-time earnings:</strong> ${usd(straight)}</p>
+      <p><strong>Overtime premium (${otHours} hr × ${usd(0.5 * regularRate)}):</strong> ${usd(otPremium)}</p>
+      <p><strong>Total for the week: ${usd(total)}</strong></p>
+      ${
+        gap > 0.005
+          ? `<p>⚠️ A payroll system using 1.5 × base rate would pay ${usd(naivePremium)} of premium — underpaying you ${usd(gap)} this week.</p>`
+          : ''
+      }`;
+    result.hidden = false;
+  });
+</script>

@@ -1,0 +1,71 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import ShiftCalculator from '../components/ShiftCalculator.astro';
+
+const faqs = [
+  {
+    q: 'How many hours a year is 4-on-4-off?',
+    a: 'You work half the days of the year — on average 182.5 twelve-hour shifts, or 2,190 hours, a 42-hour weekly average. Employers handle the two hours over 40 differently: some pay standing overtime, others use 11.5-hour shifts or bank the time, so check your own agreement.',
+  },
+  {
+    q: 'Does 4-on-4-off ever give me a normal weekend?',
+    a: 'Yes, but on a drifting timetable. The 8-day cycle slides against the 7-day week, so your four days off land one weekday earlier each cycle: sometimes they swallow a full weekend, then drift into midweek, then come back around. The calculator makes the drift visible a year ahead so you can plan around it instead of being surprised.',
+  },
+  {
+    q: 'Is 4-on-4-off days only, or does it rotate to nights?',
+    a: 'Both exist. The classic version is fixed — a day squad and a night squad, which is what the Days/Nights selector models. Some operations rotate crews between days and nights every set number of cycles; if yours does, regenerate with the other setting when your rotation flips.',
+  },
+  {
+    q: 'What is the hardest part of the fourth shift?',
+    a: 'Cumulative fatigue. Research on 12-hour rosters consistently finds alertness dips on the third and fourth consecutive shift, especially on nights. Knowing exactly when your 4-night runs fall lets you keep those stretches free of daytime obligations and protect sleep.',
+  },
+];
+---
+
+<ToolPage
+  title="4 On 4 Off Shift Schedule Calculator — 12-Month Rota Calendar"
+  description="Free 4-on-4-off schedule calculator. Enter the first day of any 4-shift block and see all your on and off days for 12 months, watch how your off-blocks drift across weekends, and export to your phone."
+  h1="4 On 4 Off Schedule Calculator"
+  faqs={faqs}
+>
+  <p>
+    <strong>4-on-4-off</strong> is the simplest 24/7 rotation there is: four 12-hour shifts, four
+    days off, repeat forever. Distribution centers, utilities, hospitals, and security contractors
+    love it because it needs only two squads per shift — and workers love the guaranteed four-day
+    break. The catch is an 8-day cycle that never sits still against the 7-day week. Enter one known
+    first-day-back below and see exactly where your blocks fall for the next year.
+  </p>
+
+  <ShiftCalculator defaultPattern="4-on-4-off" />
+
+  <h2>The drifting weekend, explained</h2>
+  <p>
+    Because 8 does not divide into 7, each cycle starts one weekday earlier than the last. Start a
+    block on a Monday and your next block starts on a Sunday, then a Saturday, and so on. Over eight
+    weeks the pattern visits every alignment: some four-off breaks contain a full Saturday–Sunday,
+    some contain neither. This is the single most misunderstood thing about the schedule — new hires
+    assume "every other weekend off" and discover the drift the hard way. Laid out over 12 months,
+    the drift stops being a surprise and becomes something you can plan with: you can spot the
+    breaks that swallow a whole weekend and aim family events at them months in advance.
+  </p>
+
+  <h2>A worked example</h2>
+  <p>
+    Anchor on <em>Friday, January 9</em>: you work January 9–12 and break January 13–16 — a break
+    that includes both weekend days. Next cycle you work January 17–20 and break January 21–24,
+    midweek-heavy. By early March your work block has drifted onto the weekend entirely. If you and
+    a partner both work 4-on-4-off on opposite squads, the same view shows the rare islands where
+    your off-blocks overlap — usually two shared days every cycle — which is the piece of
+    information two-shift-worker households actually run on.
+  </p>
+
+  <h2>Compared with the alternatives</h2>
+  <p>
+    Against the <a href="/2-2-3-panama-schedule-calculator">2-2-3 Panama</a>, 4-on-4-off trades the
+    fixed every-other-weekend for longer, deeper breaks — four days is enough to genuinely reset, or
+    to take a short trip without touching leave. Against <a href="/dupont-schedule-calculator">
+    DuPont</a>, it is far kinder to sleep (no day/night flip inside a cycle in the fixed version)
+    but never hands you a seven-day break. Crews choosing between them should generate a year of
+    each here and compare the holiday answers side by side.
+  </p>
+</ToolPage>

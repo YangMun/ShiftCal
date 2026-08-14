@@ -1,0 +1,15 @@
+# build
+node_modules/
+dist/
+.astro/
+
+# env / secrets (AdSense ID, 분석 토큰 등은 커밋 금지)
+.env
+.env.*
+.wrangler/
+
+# 내부 전략 문서는 공개 저장소에 올리지 않음
+docs/
+
+# os
+.DS_Store

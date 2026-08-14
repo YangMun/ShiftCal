@@ -1,0 +1,156 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+
+const faqs = [
+  {
+    q: 'How is 3×12 nursing overtime calculated?',
+    a: 'Three 12s is 36 hours — under federal law, no weekly overtime until you cross 40. Picking up a fourth 12 makes a 48-hour week: 40 straight + 8 overtime hours at 1.5 × your regular rate (which must include differentials). A few states add daily-OT rules — California pays overtime after 8 hours in a day and double time after 12, so a 12.5-hour California shift already contains premium time.',
+  },
+  {
+    q: 'What are typical nursing differentials?',
+    a: 'Common US structures: evenings ~10% of base, nights ~15–20% (or a flat $3–$8/hr), weekend add-on $2–$5/hr or a percentage, with charge-nurse and preceptor premiums of $1–$2.50/hr. Exact numbers vary widely by region and system — enter yours above for real math instead of averages.',
+  },
+  {
+    q: 'Does night differential change my overtime rate?',
+    a: 'Yes. The FLSA regular rate — the basis of your 1.5× — is total weekly earnings including differentials divided by hours. A night-heavy week raises your overtime rate above 1.5 × base, and payroll that ignores this is underpaying you. The shift differential calculator shows the exact gap.',
+  },
+  {
+    q: 'Is picking up a fourth shift worth it?',
+    a: 'Financially it is usually the best-paid shift of your week — 12 hours all at the overtime rate if you are already at 36+, plus any incentive bonus your unit offers. The calculator shows the marginal dollars; only you can price the recovery day it costs.',
+  },
+];
+---
+
+<ToolPage
+  title="Nurse Shift Pay Calculator — 3×12s, Differentials, Real Overtime"
+  description="Calculate a nurse's weekly and annual gross from base rate, night and weekend differentials, charge pay, and extra shifts — with FLSA-correct overtime for a fourth 12."
+  h1="Nurse Shift Pay Calculator"
+  faqs={faqs}
+>
+  <p>
+    Nursing pay is a stack: base rate, night differential, weekend add-on, charge pay, and the
+    occasional fourth 12 that lands almost entirely in overtime. Model your actual week below —
+    including the FLSA rule that differentials raise your overtime rate — and see what a schedule
+    change or a pickup shift is really worth.
+  </p>
+
+  <form id="nurse-form" class="calc-form">
+    <label>Base hourly rate ($)<input type="number" name="base" step="0.01" min="0" required value="42" /></label>
+    <label>12-hour shifts per week<input type="number" name="shifts" min="0" max="7" value="3" /></label>
+    <label>Of those, night shifts<input type="number" name="nights" min="0" max="7" value="2" /></label>
+    <label>Night differential ($/hr)<input type="number" name="nightDiff" step="0.01" min="0" value="5" /></label>
+    <label>Weekend shifts per week<input type="number" name="weekends" min="0" max="7" value="1" /></label>
+    <label>Weekend differential ($/hr)<input type="number" name="weekendDiff" step="0.01" min="0" value="3" /></label>
+    <label>Charge/preceptor premium ($/hr, all hours)<input type="number" name="charge" step="0.01" min="0" value="0" /></label>
+    <button type="submit">Calculate my pay</button>
+  </form>
+  <div id="nurse-result" class="calc-result" hidden></div>
+
+  <h2>Why 3×12 pay confuses everyone</h2>
+  <p>
+    A 36-hour week under a 40-hour overtime threshold means your scheduled week never touches
+    overtime — all the premium money lives in differentials and pickups. That produces the two
+    classic surprises on nursing pay stubs. First, two nurses with identical base rates can differ
+    by $8,000+ a year purely on shift mix: two nights and a weekend of differential compounds fast.
+    Second, the fourth 12 is disproportionately lucrative — eight of its twelve hours are overtime
+    at a regular rate that your differentials have already pushed above base. The calculator splits
+    these pieces out so you can see exactly where your money comes from.
+  </p>
+
+  <h2>Reading your result like a negotiator</h2>
+  <p>
+    The annual figure assumes you work your pattern 52 weeks minus nothing — use it as a gross
+    ceiling, then subtract your realistic unpaid leave. When comparing offers, do not compare base
+    rates: run each hospital's full stack (base, night, weekend, charge) through this page, because
+    a $2 higher base with weak differentials routinely loses to the reverse. Travel and per-diem
+    offers deserve the same treatment against staff positions. And if your unit self-schedules,
+    the same math prices your choices: trading a Tuesday day for a Saturday night has a dollar
+    value — check it against your <a href="/2-2-3-panama-schedule-calculator">rotation calendar</a>
+    before giving away premium shifts.
+  </p>
+
+  <h2>Beyond the paycheck</h2>
+  <p>
+    Night-differential money has a physiological price; the
+    <a href="/night-shift-sleep-calculator">night shift sleep calculator</a> helps you build an
+    anchor-sleep plan that keeps consecutive nights sustainable. And whichever mix you settle on,
+    map your paydays with the <a href="/biweekly-payday-calculator">biweekly payday calculator</a> —
+    overtime-heavy weeks land on the following check, and knowing which one keeps budgeting honest.
+  </p>
+</ToolPage>
+
+<style>
+  .calc-form {
+    display: grid;
+    gap: 0.75rem;
+    padding: 1rem;
+    border: 1px solid #d4d4d8;
+    border-radius: 10px;
+    background: #f8fafc;
+    margin: 1.5rem 0;
+  }
+  .calc-form label {
+    display: grid;
+    gap: 0.25rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .calc-form input {
+    padding: 0.5rem;
+    border: 1px solid #a1a1aa;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+  .calc-form button {
+    padding: 0.7rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--accent, #1d4ed8);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.05rem;
+    cursor: pointer;
+  }
+  .calc-result {
+    padding: 1rem;
+    border-radius: 10px;
+    background: #eff6ff;
+    margin-bottom: 1rem;
+  }
+</style>
+
+<script>
+  const form = document.getElementById('nurse-form') as HTMLFormElement;
+  const result = document.getElementById('nurse-result') as HTMLElement;
+  const usd = (n: number) => n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const d = new FormData(form);
+    const base = Number(d.get('base'));
+    const shifts = Number(d.get('shifts'));
+    const nights = Math.min(Number(d.get('nights')), shifts);
+    const nightDiff = Number(d.get('nightDiff'));
+    const weekends = Math.min(Number(d.get('weekends')), shifts);
+    const weekendDiff = Number(d.get('weekendDiff'));
+    const charge = Number(d.get('charge'));
+
+    const hours = shifts * 12;
+    const straight =
+      base * hours + nightDiff * nights * 12 + weekendDiff * weekends * 12 + charge * hours;
+    const regularRate = hours > 0 ? straight / hours : 0;
+    const otHours = Math.max(0, hours - 40);
+    const otPremium = 0.5 * regularRate * otHours;
+    const weekly = straight + otPremium;
+    const annual = weekly * 52;
+    const diffShare = straight - base * hours;
+
+    result.innerHTML = `
+      <p><strong>Weekly hours:</strong> ${hours} ${otHours ? `(${otHours} at overtime)` : '(no weekly OT under 40h federal rule)'}</p>
+      <p><strong>Differential &amp; premium earnings:</strong> ${usd(diffShare)}/week</p>
+      ${otHours ? `<p><strong>Overtime premium (FLSA regular rate ${usd(regularRate)}/hr):</strong> ${usd(otPremium)}/week</p>` : ''}
+      <p><strong>Weekly gross: ${usd(weekly)}</strong></p>
+      <p><strong>Annual gross (52 weeks): ${usd(annual)}</strong></p>`;
+    result.hidden = false;
+  });
+</script>

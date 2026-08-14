@@ -1,0 +1,343 @@
+---
+import { PATTERNS } from '../lib/shiftPatterns';
+
+interface Props {
+  /** 페이지 기본 패턴 slug. 'all'이면 전체 선택 가능 */
+  defaultPattern?: string;
+  /** 즉답 섹션에서 강조할 공휴일 이름 (예: "Christmas Day") */
+  highlightHoliday?: string;
+}
+const { defaultPattern = 'all', highlightHoliday = '' } = Astro.props;
+const showSelect = defaultPattern === 'all';
+---
+
+<div class="shiftcal" data-default-pattern={defaultPattern} data-highlight={highlightHoliday}>
+  <form class="sc-form">
+    {
+      showSelect ? (
+        <label>
+          My rotation
+          <select name="pattern">
+            {PATTERNS.map((p) => (
+              <option value={p.slug}>{p.name}</option>
+            ))}
+          </select>
+        </label>
+      ) : (
+        <input type="hidden" name="pattern" value={defaultPattern} />
+      )
+    }
+    <label>
+      First day of a work stretch
+      <input type="date" name="anchor" required />
+      <small>Pick any date you know you start a run of shifts — past or future.</small>
+    </label>
+    <label class="sc-daynight" hidden>
+      My crew works
+      <select name="daynight">
+        <option value="D">Day shifts</option>
+        <option value="N">Night shifts</option>
+      </select>
+    </label>
+    <label>
+      Last payday <span class="sc-optional">(optional, biweekly)</span>
+      <input type="date" name="payday" />
+    </label>
+    <button type="submit">Show my calendar</button>
+  </form>
+
+  <section class="sc-answers" hidden aria-live="polite">
+    <h2>Am I working on…</h2>
+    <ul class="sc-holiday-list"></ul>
+  </section>
+
+  <section class="sc-calwrap" hidden>
+    <div class="sc-legend">
+      <span><i class="sc-swatch sw-d"></i> Day</span>
+      <span><i class="sc-swatch sw-n"></i> Night</span>
+      <span><i class="sc-swatch sw-h"></i> Holiday</span>
+      <span><i class="sc-swatch sw-p"></i> Payday</span>
+    </div>
+    <div class="sc-months"></div>
+    <button type="button" class="sc-ics">Add to my phone calendar (.ics)</button>
+  </section>
+</div>
+
+<style>
+  .shiftcal {
+    margin: 1.5rem 0;
+  }
+  .sc-form {
+    display: grid;
+    gap: 0.75rem;
+    padding: 1rem;
+    border: 1px solid #d4d4d8;
+    border-radius: 10px;
+    background: #f8fafc;
+  }
+  .sc-form label {
+    display: grid;
+    gap: 0.25rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .sc-form small {
+    font-weight: 400;
+    color: #52525b;
+  }
+  .sc-optional {
+    font-weight: 400;
+    color: #52525b;
+  }
+  .sc-form input,
+  .sc-form select {
+    padding: 0.5rem;
+    border: 1px solid #a1a1aa;
+    border-radius: 6px;
+    font-size: 1rem;
+    background: #fff;
+  }
+  .sc-form button {
+    padding: 0.7rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--accent, #1d4ed8);
+    color: #fff;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .sc-answers ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.35rem;
+  }
+  .sc-answers li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.45rem 0.6rem;
+    border-radius: 6px;
+    background: #f4f4f5;
+  }
+  .sc-answers li.working {
+    background: #fee2e2;
+  }
+  .sc-answers li.off {
+    background: #dcfce7;
+  }
+  .sc-answers li.hl {
+    outline: 2px solid var(--accent, #1d4ed8);
+  }
+  .sc-legend {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin: 1rem 0 0.5rem;
+    font-size: 0.9rem;
+  }
+  .sc-swatch {
+    display: inline-block;
+    width: 0.9em;
+    height: 0.9em;
+    border-radius: 3px;
+    vertical-align: -0.1em;
+  }
+  .sw-d { background: #bfdbfe; }
+  .sw-n { background: #c7d2fe; border: 1px solid #6366f1; }
+  .sw-h { background: #fff; border: 2px solid #f59e0b; }
+  .sw-p { background: #bbf7d0; }
+  .sc-months {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+  .sc-months :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  .sc-months :global(caption) {
+    font-weight: 700;
+    padding-bottom: 0.3rem;
+  }
+  .sc-months :global(th) {
+    color: #52525b;
+    font-weight: 600;
+  }
+  .sc-months :global(td) {
+    text-align: center;
+    padding: 0.3rem 0;
+    border-radius: 4px;
+  }
+  .sc-months :global(td.d) { background: #bfdbfe; }
+  .sc-months :global(td.n) { background: #c7d2fe; }
+  .sc-months :global(td.hol) { box-shadow: inset 0 0 0 2px #f59e0b; }
+  .sc-months :global(td.pay) { background: #bbf7d0; }
+  .sc-months :global(td.d.pay) { background: linear-gradient(135deg, #bfdbfe 55%, #bbf7d0 45%); }
+  .sc-months :global(td.n.pay) { background: linear-gradient(135deg, #c7d2fe 55%, #bbf7d0 45%); }
+  .sc-ics {
+    margin-top: 1.25rem;
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--accent, #1d4ed8);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--accent, #1d4ed8);
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  import { PATTERNS, patternBySlug, shiftOn, type ShiftPattern, type ShiftCode } from '../lib/shiftPatterns';
+  import { holidaysBetween } from '../lib/holidays';
+  import { downloadIcs, type CalendarEvent } from '../lib/ics';
+
+  const MS_PER_DAY = 86_400_000;
+  const STORAGE_KEY = 'shiftcal:config';
+
+  function parseLocalDate(value: string): Date {
+    const [y, m, d] = value.split('-').map(Number);
+    return new Date(y!, m! - 1, d!);
+  }
+
+  function sameDay(a: Date, b: Date): boolean {
+    return (
+      a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
+    );
+  }
+
+  function isPayday(payAnchor: Date | null, date: Date): boolean {
+    if (!payAnchor) return false;
+    const utc = (d: Date) => Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
+    const diff = Math.floor((utc(date) - utc(payAnchor)) / MS_PER_DAY);
+    return diff % 14 === 0;
+  }
+
+  function effectiveCode(pattern: ShiftPattern, dayNight: string, code: ShiftCode): ShiftCode {
+    if (code === 'D' && pattern.fixedShiftChoice && dayNight === 'N') return 'N';
+    return code;
+  }
+
+  function shiftTitle(pattern: ShiftPattern, code: ShiftCode): string {
+    if (pattern.shiftLength === 24) return '24-hr Shift';
+    return code === 'N' ? 'Night Shift' : 'Day Shift';
+  }
+
+  function render(root: HTMLElement): void {
+    const form = root.querySelector<HTMLFormElement>('.sc-form')!;
+    const data = new FormData(form);
+    const slug = String(data.get('pattern'));
+    const pattern = patternBySlug(slug) ?? PATTERNS[0]!;
+    const anchorRaw = String(data.get('anchor') ?? '');
+    if (!anchorRaw) return;
+    const anchor = parseLocalDate(anchorRaw);
+    const dayNight = String(data.get('daynight') ?? 'D');
+    const paydayRaw = String(data.get('payday') ?? '');
+    const payAnchor = paydayRaw ? parseLocalDate(paydayRaw) : null;
+
+    const today = new Date();
+    const start = new Date(today.getFullYear(), today.getMonth(), 1);
+    const end = new Date(today.getFullYear(), today.getMonth() + 12, 0);
+
+    // 공휴일 즉답
+    const answers = root.querySelector<HTMLElement>('.sc-answers')!;
+    const list = answers.querySelector('.sc-holiday-list')!;
+    const highlight = root.dataset.highlight ?? '';
+    list.innerHTML = '';
+    for (const h of holidaysBetween(today, end)) {
+      const code = effectiveCode(pattern, dayNight, shiftOn(pattern, anchor, h.date));
+      const li = document.createElement('li');
+      li.className = code === 'O' ? 'off' : 'working';
+      if (highlight && h.name === highlight) li.classList.add('hl');
+      const when = h.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      li.innerHTML = `<span>${h.name} <small>(${when})</small></span><strong>${
+        code === 'O' ? 'Off ✅' : `Working — ${shiftTitle(pattern, code)}`
+      }</strong>`;
+      list.appendChild(li);
+    }
+    answers.hidden = false;
+
+    // 12개월 달력
+    const wrap = root.querySelector<HTMLElement>('.sc-calwrap')!;
+    const months = wrap.querySelector('.sc-months')!;
+    months.innerHTML = '';
+    const events: CalendarEvent[] = [];
+    for (let m = 0; m < 12; m++) {
+      const first = new Date(start.getFullYear(), start.getMonth() + m, 1);
+      const table = document.createElement('table');
+      const monthName = first.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      let html = `<caption>${monthName}</caption><tr>${['S', 'M', 'T', 'W', 'T', 'F', 'S']
+        .map((d) => `<th scope="col">${d}</th>`)
+        .join('')}</tr><tr>`;
+      html += '<td></td>'.repeat(first.getDay());
+      let weekday = first.getDay();
+      const daysInMonth = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate();
+      const monthHolidays = holidaysBetween(first, new Date(first.getFullYear(), first.getMonth(), daysInMonth));
+      for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(first.getFullYear(), first.getMonth(), day);
+        const code = effectiveCode(pattern, dayNight, shiftOn(pattern, anchor, date));
+        const classes: string[] = [];
+        if (code === 'D') classes.push('d');
+        if (code === 'N') classes.push('n');
+        if (monthHolidays.some((h) => sameDay(h.date, date))) classes.push('hol');
+        if (isPayday(payAnchor, date)) classes.push('pay');
+        html += `<td class="${classes.join(' ')}">${day}</td>`;
+        if (code !== 'O' && date >= today) events.push({ date, title: shiftTitle(pattern, code) });
+        weekday = (weekday + 1) % 7;
+        if (weekday === 0 && day < daysInMonth) html += '</tr><tr>';
+      }
+      html += '</tr>';
+      table.innerHTML = html;
+      months.appendChild(table);
+    }
+    wrap.hidden = false;
+
+    const icsBtn = wrap.querySelector<HTMLButtonElement>('.sc-ics')!;
+    icsBtn.onclick = () => downloadIcs(events, `shiftcal-${pattern.slug}.ics`);
+
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ slug, anchor: anchorRaw, dayNight, payday: paydayRaw }),
+    );
+  }
+
+  function syncDayNight(root: HTMLElement): void {
+    const form = root.querySelector<HTMLFormElement>('.sc-form')!;
+    const slug = String(new FormData(form).get('pattern'));
+    const pattern = patternBySlug(slug);
+    const label = root.querySelector<HTMLElement>('.sc-daynight')!;
+    label.hidden = !pattern?.fixedShiftChoice;
+  }
+
+  for (const root of document.querySelectorAll<HTMLElement>('.shiftcal')) {
+    const form = root.querySelector<HTMLFormElement>('.sc-form')!;
+
+    // 저장된 설정 복원 (재방문자는 값이 미리 채워짐)
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? 'null');
+      if (saved) {
+        const patternField = form.elements.namedItem('pattern');
+        if (patternField instanceof HTMLSelectElement && patternBySlug(saved.slug)) {
+          patternField.value = saved.slug;
+        }
+        if (saved.anchor) (form.elements.namedItem('anchor') as HTMLInputElement).value = saved.anchor;
+        if (saved.dayNight) (form.elements.namedItem('daynight') as HTMLSelectElement).value = saved.dayNight;
+        if (saved.payday) (form.elements.namedItem('payday') as HTMLInputElement).value = saved.payday;
+      }
+    } catch {
+      /* 손상된 저장값은 무시 */
+    }
+
+    syncDayNight(root);
+    form.addEventListener('change', () => syncDayNight(root));
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      render(root);
+    });
+
+    // 값이 이미 채워져 있으면(재방문) 즉시 렌더
+    if ((form.elements.namedItem('anchor') as HTMLInputElement).value) render(root);
+  }
+</script>

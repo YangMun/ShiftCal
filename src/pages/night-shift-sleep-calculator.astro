@@ -1,0 +1,161 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+
+const faqs = [
+  {
+    q: 'What is anchor sleep?',
+    a: 'A block of sleep (ideally 3–4 hours) kept at the same clock time every day, workdays and days off alike. Anchoring part of your sleep stabilizes your circadian rhythm even while the rest of your sleep moves around your shifts — it is the most practical strategy sleep researchers offer rotating workers.',
+  },
+  {
+    q: 'Should I sleep right after a night shift or stay up?',
+    a: 'Go down as soon as you reasonably can. Morning light is the enemy — it tells your body clock to wake up. Sunglasses on the commute, blackout curtains, and getting to bed within ~90 minutes of arriving home protect the deepest part of your day sleep.',
+  },
+  {
+    q: 'How do I flip back to days after my last night shift?',
+    a: 'The consensus approach: sleep a short 3–4 hour "landing nap" the morning after your final night, then stay up until a near-normal bedtime that evening. One groggy day buys the flip; sleeping a full day delays it and wastes your first off-day.',
+  },
+  {
+    q: 'Is caffeine timing really that important?',
+    a: 'Yes — caffeine has a 5–6 hour half-life. The working rule is a cutoff 6–8 hours before your planned sleep: for a night worker sleeping at 8 am, that means no caffeine after about 1–2 am, however tempting the 4 am coffee is.',
+  },
+];
+---
+
+<ToolPage
+  title="Night Shift Sleep Calculator — Build Your Sleep Plan Around Your Shifts"
+  description="Enter your night shift start and end times and get a personalized sleep plan: main sleep window, anchor sleep, pre-shift nap, caffeine cutoff, and how to flip back to days off."
+  h1="Night Shift Sleep Calculator"
+  faqs={faqs}
+>
+  <p>
+    Night shift does not have to mean permanent jet lag. Enter your shift times below and get a
+    concrete plan — main sleep window, an anchor-sleep block to hold your rhythm steady, the
+    pre-shift nap that prevents the 4 am wall, and a caffeine cutoff that will not sabotage your
+    morning sleep.
+  </p>
+
+  <form id="sleep-form" class="calc-form">
+    <label>My shift starts<input type="time" name="start" required value="19:00" /></label>
+    <label>My shift ends<input type="time" name="end" required value="07:00" /></label>
+    <label>My commute home (minutes)<input type="number" name="commute" min="0" max="180" value="30" /></label>
+    <button type="submit">Build my sleep plan</button>
+  </form>
+  <div id="sleep-result" class="calc-result" hidden></div>
+
+  <h2>The three-block strategy</h2>
+  <p>
+    Most successful night workers converge on the same architecture. <strong>Block one — main
+    sleep:</strong> as soon as possible after getting home, in a bedroom staged for night (blackout,
+    cool, phone silenced, household briefed). Aim for 5–6 hours; day sleep fragments more easily
+    than night sleep, so protect it fiercely. <strong>Block two — anchor:</strong> keep some part of
+    that window fixed on every day of the week, including days off. The anchor is what stops each
+    rotation from feeling like a new time zone. <strong>Block three — the pre-shift nap:</strong>
+    60–90 minutes ending an hour before you leave. It clears sleep pressure right before the hours
+    when your circadian low (roughly 3–5 am) hits hardest.
+  </p>
+
+  <h2>Days off without wrecking the week</h2>
+  <p>
+    The hardest question in night work is not the shifts — it is the first off-day. Full flip, or
+    hold the night schedule? If your break is one day, hold: stay on a late sleep schedule and keep
+    your anchor. If it is two or more days — the breaks a
+    <a href="/2-2-3-panama-schedule-calculator">2-2-3</a> or
+    <a href="/4-on-4-off-schedule-calculator">4-on-4-off</a> hands you — the landing-nap flip (short
+    morning sleep, push to a normal bedtime) gets you living on family time by the second day.
+    Check your own calendar for where the long breaks fall; the flip strategy only pays when the
+    break is long enough to enjoy the result.
+  </p>
+
+  <h2>What the research keeps confirming</h2>
+  <p>
+    Night work is classified by the WHO as a probable carcinogen and is linked to cardiovascular and
+    metabolic risk — reasons to treat sleep as an occupational safety practice, not a luxury. The
+    levers with the strongest evidence are the ones in this plan: light control (bright light during
+    the shift, darkness after), strategic caffeine with a hard cutoff, consistent anchor sleep, and
+    naps before — not during — the drive home. If you are chronically getting under six total hours,
+    that is a conversation with your scheduler or physician, not a badge of toughness. If the
+    money is the reason you keep taking nights, at least price it correctly with the
+    <a href="/shift-differential-calculator">shift differential calculator</a>.
+  </p>
+</ToolPage>
+
+<style>
+  .calc-form {
+    display: grid;
+    gap: 0.75rem;
+    padding: 1rem;
+    border: 1px solid #d4d4d8;
+    border-radius: 10px;
+    background: #f8fafc;
+    margin: 1.5rem 0;
+  }
+  .calc-form label {
+    display: grid;
+    gap: 0.25rem;
+    font-weight: 600;
+  }
+  .calc-form input {
+    padding: 0.5rem;
+    border: 1px solid #a1a1aa;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+  .calc-form button {
+    padding: 0.7rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--accent, #1d4ed8);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.05rem;
+    cursor: pointer;
+  }
+  .calc-result {
+    padding: 1rem;
+    border-radius: 10px;
+    background: #eff6ff;
+    margin-bottom: 1rem;
+  }
+</style>
+
+<script>
+  const form = document.getElementById('sleep-form') as HTMLFormElement;
+  const result = document.getElementById('sleep-result') as HTMLElement;
+
+  function toMinutes(t: string): number {
+    const [h, m] = t.split(':').map(Number);
+    return h! * 60 + m!;
+  }
+  function fmt(min: number): string {
+    min = ((min % 1440) + 1440) % 1440;
+    const h = Math.floor(min / 60);
+    const m = min % 60;
+    const ampm = h >= 12 ? 'pm' : 'am';
+    const h12 = h % 12 === 0 ? 12 : h % 12;
+    return `${h12}:${String(m).padStart(2, '0')} ${ampm}`;
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const d = new FormData(form);
+    const end = toMinutes(String(d.get('end')));
+    const start = toMinutes(String(d.get('start')));
+    const commute = Number(d.get('commute'));
+
+    const sleepStart = end + commute + 60; // 귀가 + 정리 후 취침
+    const sleepEnd = sleepStart + 6 * 60;
+    const anchorStart = sleepStart;
+    const anchorEnd = sleepStart + 3.5 * 60;
+    const napEnd = start - 60;
+    const napStart = napEnd - 90;
+    const caffeineCutoff = sleepStart - 7 * 60;
+
+    result.innerHTML = `
+      <p><strong>Main sleep:</strong> ${fmt(sleepStart)} – ${fmt(sleepEnd)} (blackout curtains, phone on do-not-disturb)</p>
+      <p><strong>Anchor block (keep even on days off):</strong> ${fmt(anchorStart)} – ${fmt(anchorEnd)}</p>
+      <p><strong>Pre-shift nap:</strong> ${fmt(napStart)} – ${fmt(napEnd)}</p>
+      <p><strong>Caffeine cutoff:</strong> ${fmt(caffeineCutoff)} — nothing after this, including the mid-shift coffee run</p>
+      <p><strong>After your last night:</strong> sleep only ${fmt(sleepStart)} – ${fmt(sleepStart + 3.5 * 60)}, then stay up until ~10:30 pm to flip back to days.</p>`;
+    result.hidden = false;
+  });
+</script>

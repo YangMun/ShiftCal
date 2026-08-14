@@ -1,0 +1,195 @@
+---
+/**
+ * 공식 달력에 앵커된 부서 전용 캘린더.
+ * cycle: 날짜별 당번 플래툰 문자 배열, anchor(현지 날짜) = cycle[0]인 날.
+ */
+interface Props {
+  cycle: string[];
+  anchor: string; // 'YYYY-MM-DD'
+  platoons: string[];
+  shiftLabel: string; // 예: '24-hr Shift (06:30 start)'
+  icsName: string;
+}
+const { cycle, anchor, platoons, shiftLabel, icsName } = Astro.props;
+---
+
+<div
+  class="deptcal"
+  data-cycle={JSON.stringify(cycle)}
+  data-anchor={anchor}
+  data-shift-label={shiftLabel}
+  data-ics-name={icsName}
+>
+  <form class="dc-form">
+    <label>
+      My platoon
+      <select name="platoon">
+        {platoons.map((p) => <option value={p}>{p} Platoon</option>)}
+      </select>
+    </label>
+    <button type="submit">Show my duty calendar</button>
+  </form>
+
+  <section class="dc-answers" hidden aria-live="polite">
+    <h2>Am I on duty on…</h2>
+    <ul class="dc-holiday-list"></ul>
+  </section>
+
+  <section class="dc-calwrap" hidden>
+    <div class="dc-legend"><span><i class="dc-swatch"></i> On duty</span><span><i class="dc-swatch dc-hol"></i> Federal holiday</span></div>
+    <div class="dc-months"></div>
+    <button type="button" class="dc-ics">Add to my phone calendar (.ics)</button>
+  </section>
+</div>
+
+<style>
+  .deptcal { margin: 1.5rem 0; }
+  .dc-form {
+    display: grid;
+    gap: 0.75rem;
+    padding: 1rem;
+    border: 1px solid #d4d4d8;
+    border-radius: 10px;
+    background: #f8fafc;
+  }
+  .dc-form label { display: grid; gap: 0.25rem; font-weight: 600; }
+  .dc-form select {
+    padding: 0.5rem;
+    border: 1px solid #a1a1aa;
+    border-radius: 6px;
+    font-size: 1rem;
+    background: #fff;
+  }
+  .dc-form button {
+    padding: 0.7rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--accent, #1d4ed8);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.05rem;
+    cursor: pointer;
+  }
+  .dc-answers ul { list-style: none; padding: 0; display: grid; gap: 0.35rem; }
+  .dc-answers :global(li) {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.45rem 0.6rem;
+    border-radius: 6px;
+    background: #f4f4f5;
+  }
+  .dc-answers :global(li.working) { background: #fee2e2; }
+  .dc-answers :global(li.off) { background: #dcfce7; }
+  .dc-legend { display: flex; gap: 1rem; margin: 1rem 0 0.5rem; font-size: 0.9rem; }
+  .dc-swatch {
+    display: inline-block;
+    width: 0.9em;
+    height: 0.9em;
+    border-radius: 3px;
+    background: #fecaca;
+    vertical-align: -0.1em;
+  }
+  .dc-swatch.dc-hol { background: #fff; border: 2px solid #f59e0b; }
+  .dc-months {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+  .dc-months :global(table) { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .dc-months :global(caption) { font-weight: 700; padding-bottom: 0.3rem; }
+  .dc-months :global(th) { color: #52525b; font-weight: 600; }
+  .dc-months :global(td) { text-align: center; padding: 0.3rem 0; border-radius: 4px; }
+  .dc-months :global(td.on) { background: #fecaca; }
+  .dc-months :global(td.hol) { box-shadow: inset 0 0 0 2px #f59e0b; }
+  .dc-ics {
+    margin-top: 1.25rem;
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--accent, #1d4ed8);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--accent, #1d4ed8);
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  import { holidaysBetween } from '../lib/holidays';
+  import { downloadIcs, type CalendarEvent } from '../lib/ics';
+
+  const MS_PER_DAY = 86_400_000;
+
+  function onDuty(cycle: string[], anchor: Date, platoon: string, date: Date): boolean {
+    const utc = (d: Date) => Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
+    const diff = Math.floor((utc(date) - utc(anchor)) / MS_PER_DAY);
+    const n = cycle.length;
+    return cycle[((diff % n) + n) % n] === platoon;
+  }
+
+  for (const root of document.querySelectorAll<HTMLElement>('.deptcal')) {
+    const cycle = JSON.parse(root.dataset.cycle!) as string[];
+    const [ay, am, ad] = root.dataset.anchor!.split('-').map(Number);
+    const anchor = new Date(ay!, am! - 1, ad!);
+    const shiftLabel = root.dataset.shiftLabel!;
+    const form = root.querySelector<HTMLFormElement>('.dc-form')!;
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const platoon = String(new FormData(form).get('platoon'));
+      const today = new Date();
+      const start = new Date(today.getFullYear(), today.getMonth(), 1);
+      const end = new Date(today.getFullYear(), today.getMonth() + 12, 0);
+
+      const answers = root.querySelector<HTMLElement>('.dc-answers')!;
+      const list = answers.querySelector('.dc-holiday-list')!;
+      list.innerHTML = '';
+      for (const h of holidaysBetween(today, end)) {
+        const working = onDuty(cycle, anchor, platoon, h.date);
+        const li = document.createElement('li');
+        li.className = working ? 'working' : 'off';
+        const when = h.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        li.innerHTML = `<span>${h.name} <small>(${when})</small></span><strong>${working ? 'On duty' : 'Off ✅'}</strong>`;
+        list.appendChild(li);
+      }
+      answers.hidden = false;
+
+      const wrap = root.querySelector<HTMLElement>('.dc-calwrap')!;
+      const months = wrap.querySelector('.dc-months')!;
+      months.innerHTML = '';
+      const events: CalendarEvent[] = [];
+      for (let m = 0; m < 12; m++) {
+        const first = new Date(start.getFullYear(), start.getMonth() + m, 1);
+        const daysInMonth = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate();
+        const monthHolidays = holidaysBetween(first, new Date(first.getFullYear(), first.getMonth(), daysInMonth));
+        const table = document.createElement('table');
+        let html = `<caption>${first.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</caption><tr>${[
+          'S', 'M', 'T', 'W', 'T', 'F', 'S',
+        ]
+          .map((d) => `<th scope="col">${d}</th>`)
+          .join('')}</tr><tr>`;
+        html += '<td></td>'.repeat(first.getDay());
+        let weekday = first.getDay();
+        for (let day = 1; day <= daysInMonth; day++) {
+          const date = new Date(first.getFullYear(), first.getMonth(), day);
+          const classes: string[] = [];
+          if (onDuty(cycle, anchor, platoon, date)) {
+            classes.push('on');
+            if (date >= today) events.push({ date, title: `${platoon} Platoon — ${shiftLabel}` });
+          }
+          if (monthHolidays.some((h) => h.date.getDate() === day)) classes.push('hol');
+          html += `<td class="${classes.join(' ')}">${day}</td>`;
+          weekday = (weekday + 1) % 7;
+          if (weekday === 0 && day < daysInMonth) html += '</tr><tr>';
+        }
+        html += '</tr>';
+        table.innerHTML = html;
+        months.appendChild(table);
+      }
+      wrap.hidden = false;
+
+      wrap.querySelector<HTMLButtonElement>('.dc-ics')!.onclick = () =>
+        downloadIcs(events, `${root.dataset.icsName}-${platoon}.ics`);
+    });
+  }
+</script>

@@ -1,0 +1,78 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import ShiftCalculator from '../components/ShiftCalculator.astro';
+
+const faqs = [
+  {
+    q: 'How many hours a year do I work on a 2-2-3 schedule?',
+    a: 'You work exactly half the days of the year — 182.5 twelve-hour shifts on average — which is 2,190 hours per year, or an average of 42 hours per week. Because some weeks are 36 hours (3 shifts) and others are 48 (4 shifts), many employers pay overtime on the 48-hour weeks or use an alternative workweek agreement.',
+  },
+  {
+    q: 'Do I really get every other weekend off on 2-2-3?',
+    a: 'Yes. The 14-day cycle guarantees one full Friday–Saturday–Sunday off every two weeks, which is the main reason crews vote for this rotation. The trade-off is that the other weekend is fully worked.',
+  },
+  {
+    q: 'What is the difference between 2-2-3, Panama, and Pitman?',
+    a: 'They share the same 2 on, 2 off, 3 on skeleton, and workplaces use the names interchangeably. Where a distinction is drawn, "Pitman" means fixed crews (permanent days or permanent nights) and "Panama" often means the rotating variant where crews swap between days and nights every 28 days. This calculator models the on/off days either way — if your site rotates day/night, just switch the Days/Nights setting when your swap happens.',
+  },
+  {
+    q: 'How do I figure out which team I am on?',
+    a: 'You do not need to know your team letter. Just enter the first day of any 2-shift or 3-shift run you actually worked, and the calculator aligns the whole 14-day cycle to your crew from that one date.',
+  },
+];
+---
+
+<ToolPage
+  title="2-2-3 (Panama) Shift Schedule Calculator — Your 12-Month Calendar"
+  description="Free 2-2-3 Panama schedule calculator. Enter one known workday and see every day-on and day-off for the next 12 months, with US holidays answered and paydays marked. Export to your phone calendar."
+  h1="2-2-3 (Panama) Schedule Calculator"
+  faqs={faqs}
+>
+  <p>
+    The 2-2-3 — better known as the <strong>Panama schedule</strong> — is the most common 12-hour
+    rotation in US manufacturing, dispatch centers, corrections, and process plants. Enter the first
+    day of any work stretch you know, and you get your full 12-month calendar: every shift, every
+    holiday answered, every payday marked.
+  </p>
+
+  <ShiftCalculator defaultPattern="2-2-3-panama" />
+
+  <h2>How the 2-2-3 rotation works</h2>
+  <p>
+    The pattern repeats every 14 days: <strong>2 on, 2 off, 3 on, 2 off, 2 on, 3 off</strong>. Four
+    crews staff the operation — two on days and two on nights — so at any moment exactly one day crew
+    and one night crew are on duty. Over the two weeks you work seven 12-hour shifts: a Monday–Tuesday
+    pair, a Friday–Saturday–Sunday run, a Wednesday–Thursday pair, and then the weekend off that
+    makes the whole thing bearable.
+  </p>
+  <p>
+    A worked example: if your crew starts a stretch on <em>Monday, March 2</em>, you work March 2–3,
+    are off March 4–5, work March 6–8, are off March 9–10, work March 11–12, and then enjoy March
+    13–15 off — a complete Friday-to-Sunday weekend. On March 16 the cycle starts again. That is why
+    veterans describe Panama as "you always know your weekend two weeks out."
+  </p>
+
+  <h2>What people like — and don't</h2>
+  <p>
+    The every-other-weekend-off guarantee is the headline benefit, and never working more than three
+    days in a row keeps fatigue manageable compared with 4-on rotations. The 2-2-3 also holds your
+    shift time constant: day crews stay on days, night crews stay on nights, so your body is not
+    flipped between day and night sleep every week the way slow-rotating patterns do.
+  </p>
+  <p>
+    The downsides are real, though. Two-day "weekends" that fall midweek do not line up with a
+    family's Saturday soccer games. The alternating 36-hour and 48-hour weeks make paychecks uneven
+    unless your employer averages them, and childcare on a pattern that never repeats weekly takes
+    planning — which is exactly why a 12-month view beats a two-week roster printout taped to the
+    fridge.
+  </p>
+
+  <h2>Planning holidays on a 2-2-3</h2>
+  <p>
+    Because 14 does not divide into 365, the pattern drifts against the calendar year: the crew that
+    worked Christmas this year is usually off Christmas next year. The holiday list above answers the
+    next 12 months instantly; if you are scheduled to work a holiday that matters to you, you have
+    months of notice to arrange a swap. Export the calendar to your phone and your whole family can
+    see your rotation next to their own plans.
+  </p>
+</ToolPage>

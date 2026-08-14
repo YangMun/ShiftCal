@@ -1,0 +1,75 @@
+---
+import ToolPage from '../layouts/ToolPage.astro';
+import ShiftCalculator from '../components/ShiftCalculator.astro';
+
+const faqs = [
+  {
+    q: 'Is Pitman the same as 2-2-3?',
+    a: 'The on/off skeleton is identical — 2 on, 2 off, 3 on over a 14-day cycle. "Pitman" is the name used mostly in policing, EMS, and security, and it emphasizes the four-crew structure: two crews permanently on days, two permanently on nights. If your workplace calls it 2-2-3 or Panama, the calculator works the same way.',
+  },
+  {
+    q: 'Does the Pitman schedule rotate me between days and nights?',
+    a: 'In the standard fixed Pitman, no — you stay on your assigned shift, and that is what this calculator models (choose Days or Nights above). Some agencies run a "rotating Pitman" where crews swap between days and nights each month or quarter; if yours does, regenerate the calendar with the other setting when your swap happens.',
+  },
+  {
+    q: 'What does "every other weekend off" actually mean on Pitman?',
+    a: 'In each 14-day cycle you get one three-day break that always covers Friday, Saturday, and Sunday, and the other weekend you work all three days. Whether your long break lands this weekend or next depends on where your crew sits in the cycle — generate your calendar above to see which weekends are yours for the next year.',
+  },
+  {
+    q: 'How many hours per week is the Pitman schedule?',
+    a: 'It averages 42 hours per week: one 36-hour week (three 12-hour shifts) followed by one 48-hour week (four shifts). Many agencies schedule the extra time as built-in overtime or shorten one shift to keep the average at 40.',
+  },
+];
+---
+
+<ToolPage
+  title="Pitman Shift Schedule Calculator — 12-Month Duty Calendar"
+  description="Free Pitman schedule calculator for police, EMS, security, and plant crews. Enter one known duty day and get a 12-month calendar with holidays answered and paydays marked. Day and night crew supported."
+  h1="Pitman Schedule Calculator"
+  faqs={faqs}
+>
+  <p>
+    The <strong>Pitman schedule</strong> is the four-crew, 12-hour rotation that keeps a patrol
+    division, 911 center, or security operation covered around the clock without anyone working more
+    than three days in a row. Enter the first day of a duty stretch you know, choose whether your
+    crew works days or nights, and get your next 12 months at a glance.
+  </p>
+
+  <ShiftCalculator defaultPattern="pitman" />
+
+  <h2>The four-crew structure</h2>
+  <p>
+    Pitman divides the workforce into four crews — call them A, B, C, D. A and B hold days; C and D
+    hold nights. Within each pair, the two crews mirror each other across the 14-day cycle of
+    <strong>2 on, 2 off, 3 on, 2 off, 2 on, 3 off</strong>: when A works, B is off, and vice versa.
+    The result is seamless coverage with a property that officers care about more than any other —
+    a guaranteed full weekend off every second week, without giving up fixed shift times.
+  </p>
+  <p>
+    That fixed-shift point matters. Rotations that cycle people between days and nights (like the
+    DuPont) are hard on sleep; Pitman lets night people stay night people. Agencies that switched
+    from 8-hour, 5-day rosters to Pitman consistently cite fewer handovers per day (two instead of
+    three) and the end of the "short weekend" problem where a day off is spent recovering.
+  </p>
+
+  <h2>Reading your own cycle</h2>
+  <p>
+    Suppose you are on C crew (nights) and your stretch starts <em>Thursday, June 4</em>. You work
+    the nights of June 4–5, break June 6–7, work June 8–10, break June 11–12, work June 13–14, and
+    then get June 15–17 completely off. Since night shifts cross midnight, a "work day" on the
+    calendar means the shift that <em>starts</em> that evening — worth remembering when you look at
+    the holiday list, because working the night of December 24 into Christmas morning feels very
+    different from having Christmas Day itself off on paper.
+  </p>
+
+  <h2>Pitman versus its rivals</h2>
+  <p>
+    Compared with <a href="/4-on-4-off-schedule-calculator">4-on-4-off</a>, Pitman trades longer
+    breaks for never having a four-shift fatigue run and for weekends that come around twice as
+    often. Compared with the <a href="/dupont-schedule-calculator">DuPont rotation</a>, it gives up
+    the famous seven-day break in exchange for stable circadian rhythm. Most crews that vote on
+    schedules end up choosing between exactly these three, so if your agency is running a schedule
+    committee, generate a year of each and put them side by side — the holiday answers alone usually
+    settle the argument.
+  </p>
+</ToolPage>

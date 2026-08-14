@@ -1,0 +1,105 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { PATTERNS } from '../lib/shiftPatterns';
+
+export interface Faq {
+  q: string;
+  a: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  h1: string;
+  faqs?: Faq[];
+  /** 관련 도구 링크에서 제외할 현재 경로 */
+  currentPath?: string;
+}
+const { title, description, h1, faqs = [], currentPath = Astro.url.pathname } = Astro.props;
+
+const schema: object[] = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: h1,
+    url: new URL(currentPath, Astro.site).href,
+    applicationCategory: 'UtilityApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'ShiftCal', item: new URL('/', Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: h1, item: new URL(currentPath, Astro.site).href },
+    ],
+  },
+];
+if (faqs.length) {
+  schema.push({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  });
+}
+
+const related = PATTERNS.filter((p) => p.path !== currentPath).slice(0, 5);
+---
+
+<BaseLayout title={title} description={description} schema={schema}>
+  <article>
+    <h1>{h1}</h1>
+    <slot />
+
+    {
+      faqs.length > 0 && (
+        <section>
+          <h2>Frequently asked questions</h2>
+          {faqs.map((f) => (
+            <details>
+              <summary>{f.q}</summary>
+              <p set:html={f.a} />
+            </details>
+          ))}
+        </section>
+      )
+    }
+
+    <aside class="related">
+      <h2>More shift calculators</h2>
+      <ul>
+        {related.map((p) => (
+          <li>
+            <a href={p.path}>{p.name}</a>
+          </li>
+        ))}
+        <li><a href="/shift-differential-calculator">Shift Differential &amp; Overtime Pay Calculator</a></li>
+        <li><a href="/night-shift-sleep-calculator">Night Shift Sleep Calculator</a></li>
+      </ul>
+    </aside>
+  </article>
+</BaseLayout>
+
+<style>
+  details {
+    margin: 0.5rem 0;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #e4e4e7;
+    border-radius: 8px;
+  }
+  summary {
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .related {
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e4e4e7;
+  }
+</style>

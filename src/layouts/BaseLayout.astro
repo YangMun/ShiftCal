@@ -1,0 +1,54 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  /** JSON-LD 구조화 데이터 (WebApplication/FAQPage 등) */
+  schema?: object;
+}
+const { title, description, schema } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
+  </head>
+  <body>
+    <header>
+      <nav><a href="/">ShiftCal</a></nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer>
+      <a href="/about">About</a> · <a href="/privacy">Privacy Policy</a> · <a href="/contact">Contact</a>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --text: #1a1a1a;
+    --bg: #ffffff;
+    --accent: #1d4ed8;
+  }
+  body {
+    margin: 0 auto;
+    max-width: 52rem;
+    padding: 0 1rem;
+    font-family: system-ui, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.6;
+  }
+  /* 광고 슬롯은 반드시 높이 예약 — CLS(레이아웃 시프트) 방어 */
+  .ad-slot {
+    min-height: 280px;
+  }
+</style>
