@@ -14,8 +14,9 @@ interface Props {
 }
 const { title, description, schema } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
-// 애드센스 스크립트 — 빌드 변수에서 주입(저장소에 ID 미포함). 승인 전에는 비활성.
-const adsensePub = import.meta.env.ADSENSE_PUB ?? process.env.ADSENSE_PUB;
+// 애드센스 스크립트 — ADSENSE_TAG=on일 때만 삽입 (승인 전에는 꺼서 CWV 보호; 심사 요청 시 변수만 켜면 됨)
+const adsTagOn = (import.meta.env.ADSENSE_TAG ?? process.env.ADSENSE_TAG) === 'on';
+const adsensePub = adsTagOn ? (import.meta.env.ADSENSE_PUB ?? process.env.ADSENSE_PUB) : undefined;
 ---
 
 <!doctype html>
@@ -82,7 +83,7 @@ const adsensePub = import.meta.env.ADSENSE_PUB ?? process.env.ADSENSE_PUB;
           <a href="/firefighter-shift-calendar">Fire&nbsp;depts</a>
           <a href="/shift-differential-calculator">Pay</a>
           <a href="/blog">Guides</a>
-          <button id="theme-toggle" type="button" aria-label="Switch color theme">Auto</button>
+          <button id="theme-toggle" type="button" aria-label="Theme: Auto">Auto</button>
         </nav>
       </div>
     </header>
@@ -165,7 +166,10 @@ const adsensePub = import.meta.env.ADSENSE_PUB ?? process.env.ADSENSE_PUB;
           document.documentElement.dataset.theme = mode;
           localStorage.setItem(KEY, mode);
         }
-        if (btn) btn.textContent = label[mode]!;
+        if (btn) {
+          btn.textContent = label[mode]!;
+          btn.setAttribute('aria-label', `Theme: ${label[mode]}`);
+        }
       }
       if (btn) {
         btn.textContent = label[current()]!;
