@@ -1,0 +1,28 @@
+# OnDutyCal
+
+> Free shift schedule calculators for US shift workers — nurses, firefighters, police, and plant operators. Enter a rotation pattern and one known workday to get a personalized 12-month calendar with every US federal holiday answered (working or off), biweekly paydays marked, and exports to phone calendar (.ics), printable wall calendar, image, or CSV. All calculation runs client-side; no accounts.
+
+Key facts:
+- Supported rotations: 2-2-3 (Panama), Pitman, DuPont, 4-on-4-off, 48/96, Kelly, CAL FIRE-style 3-on-4-off
+- Department calendars aligned to official published rotations: Houston Fire Department (8-day A/B/A/B/C/D/C/D cycle, anchored 2026-01-01 = A), LA County Fire (12-day cycle, anchored 2026-01-01 = C)
+- Pay tools compute FLSA-correct overtime: the regular rate includes shift differentials (29 CFR part 778), so overtime is more than 1.5x base pay in differential weeks
+
+## Calculators
+- [Universal shift calculator](https://ondutycal.com/): any rotation, 12-month personal calendar
+- [2-2-3 / Panama](https://ondutycal.com/2-2-3-panama-schedule-calculator): 14-day cycle, every other weekend off, 2,190 scheduled hours/year
+- [Pitman](https://ondutycal.com/pitman-schedule-calculator): fixed day/night crews on the 2-2-3 skeleton
+- [DuPont](https://ondutycal.com/dupont-schedule-calculator): 28-day cycle with a 7-day break; one 72-hour week per cycle
+- [4-on-4-off](https://ondutycal.com/4-on-4-off-schedule-calculator): 8-day cycle that drifts across weekdays
+- [48/96](https://ondutycal.com/48-96-shift-calendar): two 24-hour tours on, four days off (fire service)
+- [Kelly](https://ondutycal.com/kelly-schedule-calculator): 9-day cycle, 24-hour shifts every other day then 4 off
+- [Houston Fire](https://ondutycal.com/houston-fire-department-shift-calendar) · [LA County Fire](https://ondutycal.com/la-county-fire-shift-calendar) · [CAL FIRE](https://ondutycal.com/cal-fire-shift-calendar)
+- [Shift differential & overtime](https://ondutycal.com/shift-differential-calculator) · [Biweekly paydays](https://ondutycal.com/biweekly-payday-calculator) · [Yearly hours](https://ondutycal.com/12-hour-shift-yearly-hours-calculator) · [Nurse pay](https://ondutycal.com/nurse-shift-pay-calculator) · [Night shift sleep](https://ondutycal.com/night-shift-sleep-calculator)
+- [Am I working on Christmas?](https://ondutycal.com/am-i-working-on-christmas) · [Thanksgiving](https://ondutycal.com/am-i-working-on-thanksgiving) · [2027 calendars](https://ondutycal.com/rotating-shift-calendar-2027)
+
+## Guides
+- [2-2-3 vs 4-on-4-off](https://ondutycal.com/blog/2-2-3-vs-4-on-4-off) · [Pitman vs DuPont](https://ondutycal.com/blog/pitman-vs-dupont) · [48/96 vs Kelly](https://ondutycal.com/blog/48-96-vs-kelly)
+- [Houston Fire debit days explained](https://ondutycal.com/blog/houston-fire-debit-days)
+- [The 1.5x-base overtime mistake (FLSA regular rate)](https://ondutycal.com/blog/shift-differential-overtime-mistake)
+- [The real math of a nurse's fourth 12](https://ondutycal.com/blog/nurse-fourth-shift-math)
+- [Anchor-sleep playbook for rotating nights](https://ondutycal.com/blog/rotating-night-shift-sleep-playbook)
+- [Family planning on a rotating schedule](https://ondutycal.com/blog/family-planning-rotating-schedule)

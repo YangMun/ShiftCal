@@ -16,6 +16,8 @@ interface Props {
   currentPath?: string;
   /** 'tool'(기본) = WebApplication 스키마, 'guide' = Article 스키마 */
   kind?: 'tool' | 'guide';
+  /** 가이드 게시/수정일 (YYYY-MM-DD) — 신선도 신호 */
+  updated?: string;
 }
 const {
   title,
@@ -24,6 +26,7 @@ const {
   faqs = [],
   currentPath = Astro.url.pathname,
   kind = 'tool',
+  updated,
 } = Astro.props;
 
 const schema: object[] = [
@@ -35,6 +38,7 @@ const schema: object[] = [
         url: new URL(currentPath, Astro.site).href,
         description,
         publisher: { '@type': 'Organization', name: 'OnDutyCal' },
+        ...(updated ? { datePublished: updated, dateModified: updated } : {}),
       }
     : {
         '@context': 'https://schema.org',
@@ -73,6 +77,7 @@ const related = PATTERNS.filter((p) => p.path !== currentPath).slice(0, 5);
 <BaseLayout title={title} description={description} schema={schema}>
   <article>
     <h1>{h1}</h1>
+    {updated && <p class="updated-line">Updated {updated}</p>}
     <slot />
 
     {
@@ -123,6 +128,12 @@ const related = PATTERNS.filter((p) => p.path !== currentPath).slice(0, 5);
     margin-top: 2.5rem;
     padding-top: 1rem;
     border-top: 1px solid var(--rule);
+  }
+  .updated-line {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: -0.5rem;
   }
   .related h2 {
     border-top: 0;
