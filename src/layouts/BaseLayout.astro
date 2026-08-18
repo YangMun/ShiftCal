@@ -11,8 +11,10 @@ interface Props {
   description: string;
   /** JSON-LD 구조화 데이터 (WebApplication/FAQPage 등) */
   schema?: object;
+  /** 검색 노출 제외 (/live 대시보드 등 내부용 페이지) */
+  noindex?: boolean;
 }
-const { title, description, schema } = Astro.props;
+const { title, description, schema, noindex } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 // 애드센스 스크립트 — ADSENSE_TAG=on일 때만 삽입 (승인 전에는 꺼서 CWV 보호; 심사 요청 시 변수만 켜면 됨)
 const adsTagOn = (import.meta.env.ADSENSE_TAG ?? process.env.ADSENSE_TAG) === 'on';
@@ -27,6 +29,7 @@ const adsensePub = adsTagOn ? (import.meta.env.ADSENSE_PUB ?? process.env.ADSENS
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="color-scheme" content="light dark" />
     <meta property="og:title" content={title} />
@@ -177,6 +180,24 @@ const adsensePub = adsTagOn ? (import.meta.env.ADSENSE_PUB ?? process.env.ADSENS
           apply(order[(order.indexOf(current()) + 1) % order.length]!);
         });
       }
+    </script>
+    {/* 실시간 방문자 하트비트 — 탭 단위 난수 id만 전송(쿠키·저장소 미사용). /live 대시보드 자신은 제외 */}
+    <script is:inline>
+      (function () {
+        if (location.pathname === '/live') return;
+        var id = self.crypto && crypto.randomUUID ? crypto.randomUUID() : 'f' + Date.now() + Math.random().toString(36).slice(2, 12);
+        var url = '/api/beat?id=' + id;
+        function beat() {
+          if (document.hidden) return;
+          if (navigator.sendBeacon) navigator.sendBeacon(url);
+          else fetch(url, { method: 'POST', keepalive: true }).catch(function () {});
+        }
+        beat();
+        setInterval(beat, 25000);
+        document.addEventListener('visibilitychange', function () {
+          if (!document.hidden) beat();
+        });
+      })();
     </script>
   </body>
 </html>

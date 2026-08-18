@@ -1,0 +1,146 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Live visitors — OnDutyCal"
+  description="Realtime visitor dashboard for OnDutyCal."
+  noindex={true}
+>
+  <article class="live-wrap">
+    <h1>Live visitors</h1>
+    <p class="live-sub">
+      Counted from anonymous 25-second heartbeats — no cookies, no Google Analytics delay.
+    </p>
+
+    <section class="live-hero" aria-live="polite">
+      <span class="live-dot" id="live-dot" aria-hidden="true"></span>
+      <span class="live-count" id="live-count">–</span>
+      <span class="live-label">on the site right now</span>
+    </section>
+
+    <section class="live-grid">
+      <div class="live-card">
+        <p class="live-num" id="live-today">–</p>
+        <p class="live-cap">Visits today <small>(UTC day)</small></p>
+      </div>
+      <div class="live-card">
+        <p class="live-num" id="live-yesterday">–</p>
+        <p class="live-cap">Visits yesterday <small>(UTC day)</small></p>
+      </div>
+    </section>
+
+    <p class="live-status" id="live-status">Connecting…</p>
+  </article>
+
+  <script>
+    const $ = (id: string) => document.getElementById(id)!;
+    const fmt = new Intl.NumberFormat('en-US');
+
+    async function refresh(): Promise<void> {
+      try {
+        const res = await fetch('/api/live', { cache: 'no-store' });
+        if (!res.ok) throw new Error(String(res.status));
+        const d = await res.json();
+        $('live-count').textContent = fmt.format(d.live);
+        $('live-today').textContent = fmt.format(d.today);
+        $('live-yesterday').textContent = fmt.format(d.yesterday);
+        $('live-status').textContent = `Updated ${new Date().toLocaleTimeString()} · refreshes every 5s`;
+        $('live-dot').classList.add('on');
+      } catch {
+        $('live-status').textContent = 'Could not reach /api/live — is the worker deployed?';
+        $('live-dot').classList.remove('on');
+      }
+    }
+
+    refresh();
+    setInterval(refresh, 5000);
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) refresh();
+    });
+  </script>
+
+  <style>
+    .live-wrap {
+      max-width: 40rem;
+    }
+    .live-sub {
+      color: var(--muted);
+    }
+    .live-hero {
+      display: flex;
+      align-items: baseline;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      padding: 2rem 1.5rem;
+      border: 1px solid var(--rule);
+      border-left: 4px solid var(--accent);
+      border-radius: 4px;
+      background: var(--surface);
+      margin: 1.8rem 0;
+    }
+    .live-dot {
+      width: 0.8rem;
+      height: 0.8rem;
+      border-radius: 50%;
+      background: var(--muted);
+      align-self: center;
+      flex: none;
+    }
+    .live-dot.on {
+      background: #2fa14b;
+      animation: live-pulse 2s ease-in-out infinite;
+    }
+    @keyframes live-pulse {
+      50% {
+        opacity: 0.35;
+      }
+    }
+    .live-count {
+      font-family: 'Barlow Semi Condensed', sans-serif;
+      font-weight: 700;
+      font-size: clamp(3.5rem, 12vw, 5.5rem);
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .live-label {
+      font-family: 'Barlow Semi Condensed', sans-serif;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+    .live-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+      gap: 1rem;
+    }
+    .live-card {
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      background: var(--surface);
+    }
+    .live-num {
+      font-family: 'Barlow Semi Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 2rem;
+      margin: 0;
+      font-variant-numeric: tabular-nums;
+    }
+    .live-cap {
+      margin: 0.2rem 0 0;
+      font-family: 'Barlow Semi Condensed', sans-serif;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .live-status {
+      margin-top: 1.5rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+  </style>
+</BaseLayout>

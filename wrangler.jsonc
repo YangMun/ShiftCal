@@ -2,8 +2,17 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "shiftcal",
   "compatibility_date": "2026-08-15",
+  "main": "worker/index.js",
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "404-page"
-  }
+    "not_found_handling": "404-page",
+    "binding": "ASSETS",
+    // /api/* 만 워커(실시간 방문자 카운터)로, 나머지는 기존처럼 정적 자산으로
+    "run_worker_first": ["/api/*"]
+  },
+  "durable_objects": {
+    "bindings": [{ "name": "LIVE", "class_name": "LiveCounter" }]
+  },
+  // SQLite 클래스라야 무료 플랜에서 Durable Object 사용 가능
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["LiveCounter"] }]
 }

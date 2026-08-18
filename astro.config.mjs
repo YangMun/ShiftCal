@@ -8,5 +8,6 @@ export default defineConfig({
   trailingSlash: 'never',
   // 'file' 출력이라야 /slug 요청이 리다이렉트 없이 200으로 서빙됨 (canonical과 일치)
   build: { format: 'file' },
-  integrations: [sitemap()],
+  // /live는 내부용 실시간 대시보드라 sitemap에서 제외 (페이지 자체도 noindex)
+  integrations: [sitemap({ filter: (page) => !page.endsWith('/live') })],
 });
