@@ -48,7 +48,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         $('live-status').textContent = `Updated ${new Date().toLocaleTimeString()} · refreshes every 5s`;
         $('live-dot').classList.add('on');
       } catch {
-        $('live-status').textContent = 'Could not reach /api/live — is the worker deployed?';
+        $('live-status').textContent =
+          'Could not load stats. If this keeps happening, reopen the dashboard with your ?key= link.';
         $('live-dot').classList.remove('on');
       }
     }

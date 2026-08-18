@@ -7,8 +7,8 @@
     "directory": "./dist",
     "not_found_handling": "404-page",
     "binding": "ASSETS",
-    // /api/* 만 워커(실시간 방문자 카운터)로, 나머지는 기존처럼 정적 자산으로
-    "run_worker_first": ["/api/*"]
+    // /api/* 와 /live(소유자 전용 대시보드)만 워커로, 나머지는 기존처럼 정적 자산으로
+    "run_worker_first": ["/api/*", "/live"]
   },
   "durable_objects": {
     "bindings": [{ "name": "LIVE", "class_name": "LiveCounter" }]
